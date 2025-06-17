@@ -37,6 +37,7 @@ export default function Navigation() {
     { name: "Événements", href: "/events", icon: Calendar },
     { name: "Messages", href: "/messages", icon: MessageCircleQuestion },
     { name: "Ressources", href: "/resources", icon: BookOpen },
+    { name: "IA Fluide", href: "/ai", icon: Brain },
   ];
 
   const handleLogout = () => {

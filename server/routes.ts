@@ -450,6 +450,351 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Forum routes
+  app.get('/api/forum/categories', async (req, res) => {
+    try {
+      const categories = [
+        {
+          id: 1,
+          name: "Polyamorie & Relations Multiples",
+          description: "Discussions sur la polyamorie, les relations ouvertes et la gestion de multiples partenaires",
+          color: "#E91E63",
+          icon: "💕",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 42,
+          lastActivity: "Il y a 2 heures"
+        },
+        {
+          id: 2,
+          name: "Tantra & Spiritualité",
+          description: "Exploration du tantra, méditation et connexions spirituelles dans l'intimité",
+          color: "#9C27B0",
+          icon: "🕉️",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 28,
+          lastActivity: "Il y a 4 heures"
+        },
+        {
+          id: 3,
+          name: "Communication & Conflits",
+          description: "Techniques de communication consciente et résolution de conflits relationnels",
+          color: "#2196F3",
+          icon: "💬",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 35,
+          lastActivity: "Il y a 1 heure"
+        },
+        {
+          id: 4,
+          name: "Sexualité Consciente",
+          description: "Discussions sur l'intimité physique, le plaisir et la sexualité éthique",
+          color: "#FF5722",
+          icon: "🌹",
+          isPrivate: false,
+          requiresApproval: true,
+          moderatorIds: [],
+          topicCount: 18,
+          lastActivity: "Il y a 3 heures"
+        },
+        {
+          id: 5,
+          name: "Développement Personnel",
+          description: "Croissance personnelle, estime de soi et développement dans les relations",
+          color: "#4CAF50",
+          icon: "🌱",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 67,
+          lastActivity: "Il y a 30 minutes"
+        },
+        {
+          id: 6,
+          name: "Jalousie & Émotions",
+          description: "Gestion de la jalousie, des émotions difficiles et de l'attachement",
+          color: "#FF9800",
+          icon: "💚",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 29,
+          lastActivity: "Il y a 1 heure"
+        },
+        {
+          id: 7,
+          name: "Communauté & Événements",
+          description: "Organisation d'événements, rencontres communautaires et sorties",
+          color: "#00BCD4",
+          icon: "🎉",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 15,
+          lastActivity: "Il y a 6 heures"
+        },
+        {
+          id: 8,
+          name: "Témoignages & Expériences",
+          description: "Partage d'expériences personnelles et témoignages de parcours",
+          color: "#8BC34A",
+          icon: "📖",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 52,
+          lastActivity: "Il y a 45 minutes"
+        },
+        {
+          id: 9,
+          name: "Ressources & Lectures",
+          description: "Recommandations de livres, articles, podcasts et autres ressources",
+          color: "#795548",
+          icon: "📚",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 34,
+          lastActivity: "Il y a 2 heures"
+        },
+        {
+          id: 10,
+          name: "Questions Débutants",
+          description: "Espace sécurisé pour les questions des personnes nouvelles aux relations alternatives",
+          color: "#607D8B",
+          icon: "❓",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 89,
+          lastActivity: "Il y a 15 minutes"
+        },
+        {
+          id: 11,
+          name: "Relations LGBTQ+",
+          description: "Discussions spécifiques aux identités et relations LGBTQ+ dans les relations alternatives",
+          color: "#673AB7",
+          icon: "🏳️‍🌈",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 23,
+          lastActivity: "Il y a 3 heures"
+        },
+        {
+          id: 12,
+          name: "Parentalité Alternative",
+          description: "Polyamorie et parentalité, co-parentalité et familles non-conventionnelles",
+          color: "#3F51B5",
+          icon: "👨‍👩‍👧‍👦",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 17,
+          lastActivity: "Il y a 5 heures"
+        },
+        {
+          id: 13,
+          name: "Bien-être & Santé",
+          description: "Santé mentale, IST, contraception et bien-être dans les relations multiples",
+          color: "#009688",
+          icon: "🏥",
+          isPrivate: false,
+          requiresApproval: true,
+          moderatorIds: [],
+          topicCount: 31,
+          lastActivity: "Il y a 2 heures"
+        },
+        {
+          id: 14,
+          name: "Pratiques Alternatives",
+          description: "BDSM éthique, kink conscient et autres pratiques alternatives",
+          color: "#E91E63",
+          icon: "🔗",
+          isPrivate: true,
+          requiresApproval: true,
+          moderatorIds: [],
+          topicCount: 12,
+          lastActivity: "Il y a 4 heures"
+        },
+        {
+          id: 15,
+          name: "Support & Entraide",
+          description: "Espace de soutien mutuel et d'entraide communautaire",
+          color: "#F44336",
+          icon: "🤝",
+          isPrivate: false,
+          requiresApproval: false,
+          moderatorIds: [],
+          topicCount: 47,
+          lastActivity: "Il y a 1 heure"
+        }
+      ];
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching forum categories:", error);
+      res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  app.get('/api/forum/topics', async (req, res) => {
+    try {
+      const { categoryId } = req.query;
+      
+      const topics = [
+        {
+          id: 1,
+          categoryId: 1,
+          authorId: "user1",
+          authorName: "Sophie L.",
+          title: "Comment gérer la communication avec plusieurs partenaires ?",
+          content: "Je découvre la polyamorie et j'aimerais des conseils sur la communication...",
+          isPinned: true,
+          isLocked: false,
+          tags: ["débutant", "communication", "conseils"],
+          viewCount: 234,
+          replyCount: 15,
+          lastReplyAt: "2025-01-17T15:30:00Z",
+          lastReplyByName: "Marc D.",
+          createdAt: "2025-01-15T10:00:00Z"
+        },
+        {
+          id: 2,
+          categoryId: 2,
+          authorId: "user2",
+          authorName: "Luna M.",
+          title: "Méditation tantrique en couple : vos expériences",
+          content: "Partageons nos expériences de méditation tantrique à deux...",
+          isPinned: false,
+          isLocked: false,
+          tags: ["tantra", "méditation", "couple"],
+          viewCount: 156,
+          replyCount: 8,
+          lastReplyAt: "2025-01-17T12:15:00Z",
+          lastReplyByName: "Alex R.",
+          createdAt: "2025-01-16T14:20:00Z"
+        },
+        {
+          id: 3,
+          categoryId: 5,
+          authorId: "user3",
+          authorName: "Thomas B.",
+          title: "Surmonter ses peurs en relations alternatives",
+          content: "Comment avez-vous surmonté vos peurs initiales ?",
+          isPinned: false,
+          isLocked: false,
+          tags: ["développement", "peurs", "témoignage"],
+          viewCount: 89,
+          replyCount: 12,
+          lastReplyAt: "2025-01-17T16:45:00Z",
+          lastReplyByName: "Emma K.",
+          createdAt: "2025-01-17T09:30:00Z"
+        }
+      ];
+
+      const filteredTopics = categoryId && categoryId !== 'all' 
+        ? topics.filter(topic => topic.categoryId === parseInt(categoryId as string))
+        : topics;
+
+      res.json(filteredTopics);
+    } catch (error) {
+      console.error("Error fetching forum topics:", error);
+      res.status(500).json({ message: "Failed to fetch topics" });
+    }
+  });
+
+  app.post('/api/forum/topics', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { categoryId, title, content, tags } = req.body;
+      
+      // Validation basique
+      if (!categoryId || !title || !content) {
+        return res.status(400).json({ message: "Données manquantes" });
+      }
+
+      const newTopic = {
+        id: Math.floor(Math.random() * 10000),
+        categoryId: parseInt(categoryId),
+        authorId: userId,
+        authorName: req.user.claims.firstName || "Utilisateur",
+        title,
+        content,
+        isPinned: false,
+        isLocked: false,
+        tags: tags || [],
+        viewCount: 0,
+        replyCount: 0,
+        lastReplyAt: new Date().toISOString(),
+        lastReplyByName: req.user.claims.firstName || "Utilisateur",
+        createdAt: new Date().toISOString()
+      };
+
+      res.json(newTopic);
+    } catch (error) {
+      console.error("Error creating forum topic:", error);
+      res.status(500).json({ message: "Failed to create topic" });
+    }
+  });
+
+  app.get('/api/community/groups', async (req, res) => {
+    try {
+      const groups = [
+        {
+          id: 1,
+          name: "Polyamorie Paris",
+          description: "Groupe local pour les personnes en relations polyamoureuses à Paris",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 50,
+          currentMembers: 34,
+          creatorId: "user1",
+          creatorName: "Sophie L.",
+          tags: ["Paris", "polyamorie", "local"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+        {
+          id: 2,
+          name: "Tantra & Méditation",
+          description: "Pratiques tantriques et méditation en groupe",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 100,
+          currentMembers: 67,
+          creatorId: "user2",
+          creatorName: "Luna M.",
+          tags: ["tantra", "méditation", "spiritualité"],
+          imageUrl: null,
+          membershipStatus: "pending"
+        },
+        {
+          id: 3,
+          name: "Communication Consciente",
+          description: "Développer ses compétences en communication relationnelle",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 75,
+          currentMembers: 45,
+          creatorId: "user3",
+          creatorName: "Thomas B.",
+          tags: ["communication", "développement", "skills"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        }
+      ];
+      res.json(groups);
+    } catch (error) {
+      console.error("Error fetching community groups:", error);
+      res.status(500).json({ message: "Failed to fetch groups" });
+    }
+  });
+
   // Subscription and monetization routes
   app.get('/api/subscription/plans', async (req, res) => {
     try {

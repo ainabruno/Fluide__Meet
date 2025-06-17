@@ -129,6 +129,86 @@ export const resources = pgTable("resources", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Professional profiles for practitioners, coaches, therapists
+export const professionalProfiles = pgTable("professional_profiles", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  businessName: varchar("business_name").notNull(),
+  description: text("description"),
+  specialties: varchar("specialties").array(), // tantra, thérapie de couple, coaching, etc.
+  certifications: text("certifications").array(),
+  yearsExperience: integer("years_experience"),
+  location: varchar("location"),
+  website: varchar("website"),
+  phone: varchar("phone"),
+  professionalEmail: varchar("professional_email"),
+  languages: varchar("languages").array(),
+  sessionTypes: varchar("session_types").array(), // individuel, couple, groupe, atelier
+  pricing: jsonb("pricing"), // structure tarifaire
+  availability: jsonb("availability"), // créneaux disponibles
+  isVerified: boolean("is_verified").default(false),
+  isActive: boolean("is_active").default(true),
+  verificationDocuments: varchar("verification_documents").array(),
+  rating: decimal("rating", { precision: 3, scale: 2 }).default("0.00"),
+  totalReviews: integer("total_reviews").default(0),
+  profileImageUrl: varchar("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Services offered by professionals
+export const professionalServices = pgTable("professional_services", {
+  id: serial("id").primaryKey(),
+  professionalId: integer("professional_id").notNull().references(() => professionalProfiles.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  description: text("description"),
+  category: varchar("category").notNull(), // consultation, atelier, formation, etc.
+  duration: integer("duration"), // en minutes
+  price: decimal("price", { precision: 10, scale: 2 }),
+  currency: varchar("currency").default("EUR"),
+  isOnline: boolean("is_online").default(false),
+  isInPerson: boolean("is_in_person").default(true),
+  maxParticipants: integer("max_participants"),
+  requirements: text("requirements"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Reviews for professional services
+export const professionalReviews = pgTable("professional_reviews", {
+  id: serial("id").primaryKey(),
+  professionalId: integer("professional_id").notNull().references(() => professionalProfiles.id, { onDelete: "cascade" }),
+  clientId: varchar("client_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  serviceId: integer("service_id").references(() => professionalServices.id, { onDelete: "set null" }),
+  rating: integer("rating").notNull(), // 1-5
+  title: varchar("title"),
+  comment: text("comment"),
+  isVerified: boolean("is_verified").default(false), // vérifié si réservation confirmée
+  isPublic: boolean("is_public").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Service bookings
+export const serviceBookings = pgTable("service_bookings", {
+  id: serial("id").primaryKey(),
+  serviceId: integer("service_id").notNull().references(() => professionalServices.id, { onDelete: "cascade" }),
+  professionalId: integer("professional_id").notNull().references(() => professionalProfiles.id, { onDelete: "cascade" }),
+  clientId: varchar("client_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  scheduledDate: timestamp("scheduled_date").notNull(),
+  duration: integer("duration").notNull(),
+  totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
+  status: varchar("status").default("pending"), // pending, confirmed, cancelled, completed
+  paymentStatus: varchar("payment_status").default("pending"),
+  notes: text("notes"),
+  meetingLink: varchar("meeting_link"), // pour les sessions en ligne
+  meetingLocation: text("meeting_location"), // pour les sessions en présentiel
+  cancellationReason: text("cancellation_reason"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one, many }) => ({
   profile: one(profiles, {
@@ -142,6 +222,9 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   interactions: many(userInteractions, { relationName: "user" }),
   targetInteractions: many(userInteractions, { relationName: "target" }),
   resources: many(resources),
+  professionalProfile: one(professionalProfiles),
+  professionalReviews: many(professionalReviews),
+  serviceBookings: many(serviceBookings),
 }));
 
 export const profilesRelations = relations(profiles, ({ one, many }) => ({

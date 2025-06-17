@@ -4,6 +4,8 @@
 
 This is a full-stack web application for a polyamory and alternative relationship dating platform called "Fluide". The application is built with a modern tech stack featuring React + TypeScript for the frontend, Express.js for the backend, and PostgreSQL with Drizzle ORM for data persistence. The platform includes features for user profiles, event management, messaging, resource sharing, and community building around ethical non-monogamy and conscious relationships.
 
+**Next Phase**: User is interested in integrating AI functionalities to enhance the platform experience, particularly around intelligent matching, educational chatbots, and automated moderation features.
+
 ## System Architecture
 
 ### Frontend Architecture
@@ -143,4 +145,6 @@ Changelog:
 
 ```
 Preferred communication style: Simple, everyday language.
+Language: French (user communicates in French)
+Interest: AI functionality integration for the dating platform
 ```

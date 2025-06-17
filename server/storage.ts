@@ -138,9 +138,7 @@ export class DatabaseStorage implements IStorage {
     limit?: number;
     offset?: number;
   }): Promise<Profile[]> {
-    let query = db.select().from(profiles).where(eq(profiles.isVisible, true));
-    
-    const conditions = [];
+    const conditions = [eq(profiles.isVisible, true)];
     
     if (filters.minAge || filters.maxAge) {
       const currentDate = new Date();
@@ -158,11 +156,9 @@ export class DatabaseStorage implements IStorage {
       conditions.push(like(profiles.location, `%${filters.location}%`));
     }
     
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions));
-    }
-    
-    return await query
+    return await db.select()
+      .from(profiles)
+      .where(and(...conditions))
       .orderBy(desc(profiles.lastActive))
       .limit(filters.limit || 20)
       .offset(filters.offset || 0);
@@ -170,8 +166,6 @@ export class DatabaseStorage implements IStorage {
 
   // Event operations
   async getEvents(filters?: { category?: string; upcoming?: boolean; limit?: number; offset?: number }): Promise<Event[]> {
-    let query = db.select().from(events).where(eq(events.isApproved, true));
-    
     const conditions = [eq(events.isApproved, true)];
     
     if (filters?.category) {
@@ -182,7 +176,8 @@ export class DatabaseStorage implements IStorage {
       conditions.push(sql`${events.startDate} > NOW()`);
     }
     
-    return await query
+    return await db.select()
+      .from(events)
       .where(and(...conditions))
       .orderBy(asc(events.startDate))
       .limit(filters?.limit || 20)
@@ -252,8 +247,6 @@ export class DatabaseStorage implements IStorage {
 
   // Resource operations
   async getResources(filters?: { type?: string; category?: string; limit?: number; offset?: number }): Promise<Resource[]> {
-    let query = db.select().from(resources).where(eq(resources.isPublished, true));
-    
     const conditions = [eq(resources.isPublished, true)];
     
     if (filters?.type) {
@@ -264,7 +257,8 @@ export class DatabaseStorage implements IStorage {
       conditions.push(eq(resources.category, filters.category));
     }
     
-    return await query
+    return await db.select()
+      .from(resources)
       .where(and(...conditions))
       .orderBy(desc(resources.createdAt))
       .limit(filters?.limit || 20)

@@ -7,6 +7,9 @@ import {
   eventRegistrations,
   userInteractions,
   profilePhotos,
+  professionalProfiles,
+  professionalServices,
+  serviceBookings,
   type User,
   type UpsertUser,
   type Profile,
@@ -23,6 +26,12 @@ import {
   type InsertUserInteraction,
   type ProfilePhoto,
   type InsertProfilePhoto,
+  type ProfessionalProfile,
+  type InsertProfessionalProfile,
+  type ProfessionalService,
+  type InsertProfessionalService,
+  type ServiceBooking,
+  type InsertServiceBooking,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, or, like, count, sql } from "drizzle-orm";

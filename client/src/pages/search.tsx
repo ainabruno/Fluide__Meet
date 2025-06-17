@@ -166,7 +166,7 @@ export default function Search() {
             <SelectValue placeholder="Tous les genres" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tous les genres</SelectItem>
+            <SelectItem value="all">Tous les genres</SelectItem>
             {GENDERS.map(gender => (
               <SelectItem key={gender} value={gender}>{gender}</SelectItem>
             ))}
@@ -182,7 +182,7 @@ export default function Search() {
             <SelectValue placeholder="Toutes orientations" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Toutes orientations</SelectItem>
+            <SelectItem value="all">Toutes orientations</SelectItem>
             {ORIENTATIONS.map(orientation => (
               <SelectItem key={orientation} value={orientation}>{orientation}</SelectItem>
             ))}

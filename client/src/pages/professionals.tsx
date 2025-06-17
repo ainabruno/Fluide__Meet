@@ -94,7 +94,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Spécialité" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les spécialités</SelectItem>
+                <SelectItem value="all">Toutes les spécialités</SelectItem>
                 {specialties.map(specialty => (
                   <SelectItem key={specialty} value={specialty}>{specialty}</SelectItem>
                 ))}
@@ -105,7 +105,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Localisation" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes les villes</SelectItem>
+                <SelectItem value="all">Toutes les villes</SelectItem>
                 {locations.map(location => (
                   <SelectItem key={location} value={location}>{location}</SelectItem>
                 ))}

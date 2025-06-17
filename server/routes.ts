@@ -279,6 +279,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Routes IA - Système de matching intelligent
+  app.post("/api/ai/compatibility", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { targetUserId } = req.body;
+      
+      if (!targetUserId) {
+        return res.status(400).json({ message: "ID utilisateur cible requis" });
+      }
+
+      const userProfile = await storage.getProfile(userId);
+      const targetProfile = await storage.getProfile(targetUserId);
+
+      if (!userProfile || !targetProfile) {
+        return res.status(404).json({ message: "Profil non trouvé" });
+      }
+
+      const compatibility = await calculateCompatibility(userProfile, targetProfile);
+      res.json(compatibility);
+    } catch (error) {
+      console.error("Erreur calcul compatibilité:", error);
+      res.status(500).json({ message: "Erreur lors du calcul de compatibilité" });
+    }
+  });
+
+  // Assistant éducatif spécialisé
+  app.post("/api/ai/assistant", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { question } = req.body;
+      
+      if (!question) {
+        return res.status(400).json({ message: "Question requise" });
+      }
+
+      const userProfile = await storage.getProfile(userId);
+      const userContext = userProfile ? {
+        experience: (userProfile.practices?.length || 0) > 3 ? 'expérimenté' : 'débutant',
+        interests: userProfile.practices || []
+      } : undefined;
+
+      const response = await getEducationalResponse(question, userContext);
+      res.json(response);
+    } catch (error) {
+      console.error("Erreur assistant éducatif:", error);
+      res.status(500).json({ message: "Erreur lors de la consultation de l'assistant" });
+    }
+  });
+
+  // Modération automatique
+  app.post("/api/ai/moderate", isAuthenticated, async (req, res) => {
+    try {
+      const { content, type } = req.body;
+      
+      if (!content || !type) {
+        return res.status(400).json({ message: "Contenu et type requis" });
+      }
+
+      const moderation = await moderateContent(content, type);
+      res.json(moderation);
+    } catch (error) {
+      console.error("Erreur modération:", error);
+      res.status(500).json({ message: "Erreur lors de la modération" });
+    }
+  });
+
+  // Suggestions de conversation
+  app.post("/api/ai/conversation-starters", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { targetUserId } = req.body;
+      
+      if (!targetUserId) {
+        return res.status(400).json({ message: "ID utilisateur cible requis" });
+      }
+
+      const userProfile = await storage.getProfile(userId);
+      const targetProfile = await storage.getProfile(targetUserId);
+
+      if (!userProfile || !targetProfile) {
+        return res.status(404).json({ message: "Profil non trouvé" });
+      }
+
+      const suggestions = await generateConversationStarters(userProfile, targetProfile);
+      res.json({ suggestions });
+    } catch (error) {
+      console.error("Erreur suggestions conversation:", error);
+      res.status(500).json({ message: "Erreur lors de la génération de suggestions" });
+    }
+  });
+
+  // Recommandations d'événements personnalisées
+  app.get("/api/ai/event-recommendations", isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      
+      const userProfile = await storage.getProfile(userId);
+      if (!userProfile) {
+        return res.status(404).json({ message: "Profil utilisateur non trouvé" });
+      }
+
+      const events = await storage.getEvents({ upcoming: true, limit: 50 });
+      const availableEvents = events.map(event => ({
+        title: event.title,
+        description: event.description || '',
+        category: event.category
+      }));
+
+      const recommendations = await getEventRecommendations(userProfile, availableEvents);
+      res.json({ recommendations });
+    } catch (error) {
+      console.error("Erreur recommandations événements:", error);
+      res.status(500).json({ message: "Erreur lors de la génération de recommandations" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

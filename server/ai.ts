@@ -129,8 +129,8 @@ Réponds en JSON avec cette structure:
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const content = response.content[0] as TextBlock;
-    const result = JSON.parse(content.text);
+    const educationalContent = response.content[0] as TextBlock;
+    const result = JSON.parse(educationalContent.text);
     return {
       message: result.message,
       suggestions: result.suggestions || [],
@@ -179,8 +179,8 @@ Réponds en JSON:
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const content = response.content[0] as TextBlock;
-    const result = JSON.parse(content.text);
+    const moderationContent = response.content[0] as TextBlock;
+    const result = JSON.parse(moderationContent.text);
     return {
       isAppropriate: result.isAppropriate !== false,
       reasons: result.reasons || [],
@@ -276,7 +276,8 @@ Réponds en JSON:
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const recommendations = JSON.parse(response.content[0].text);
+    const content = response.content[0] as TextBlock;
+    const recommendations = JSON.parse(content.text);
     return Array.isArray(recommendations) ? recommendations : [];
   } catch (error) {
     console.error('Erreur recommandations événements:', error);

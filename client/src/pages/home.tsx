@@ -52,39 +52,57 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-surface-50 via-white to-rose-50/30">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-playfair font-bold text-neutral-600 mb-2">
-                  Bienvenue, {user.firstName || 'Membre'}! 👋
-                </h1>
-                <p className="text-neutral-500 text-lg">
-                  Découvrez votre communauté et connectez-vous en toute sécurité
-                </p>
+        <div className="mb-12">
+          <div className="relative overflow-hidden rounded-3xl p-8 lg:p-12">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-transparent" />
+            
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="w-20 h-20 gradient-primary rounded-2xl flex items-center justify-center shadow-xl">
+                  <Heart className="text-white w-10 h-10" />
+                </div>
+                <div>
+                  <h1 className="text-4xl lg:text-5xl font-playfair font-bold text-foreground mb-3">
+                    Bienvenue, {user.firstName || 'Membre'} !
+                  </h1>
+                  <p className="text-xl text-muted-foreground">
+                    Votre espace personnel pour explorer et vous connecter en toute conscience
+                  </p>
+                </div>
               </div>
-              <div className="hidden md:block">
-                <img 
-                  src={user.profileImageUrl || "https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200"}
-                  alt="Profile"
-                  className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
-                />
+              
+              <div className="hidden lg:block">
+                <div className="relative">
+                  <div className="absolute inset-0 gradient-primary rounded-full blur-lg opacity-30 scale-110" />
+                  <img 
+                    src={user.profileImageUrl || "https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200"}
+                    alt="Profile"
+                    className="relative w-24 h-24 rounded-full object-cover border-4 border-white shadow-2xl"
+                  />
+                </div>
               </div>
             </div>
             
             {!user.profile && (
-              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="mt-8 glass-effect rounded-2xl p-6 border border-yellow-200/50">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-yellow-800">Complétez votre profil</h3>
-                    <p className="text-yellow-700 text-sm">Créez votre profil pour commencer à explorer la communauté</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center">
+                      <Star className="text-white w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-lg">Complétez votre profil</h3>
+                      <p className="text-muted-foreground">Créez votre profil pour commencer à explorer la communauté</p>
+                    </div>
                   </div>
-                  <Button className="bg-primary hover:bg-blue-600">
+                  <Button className="button-glow gradient-primary text-white px-6 py-3 rounded-xl shadow-lg">
                     Créer mon profil
                   </Button>
                 </div>
@@ -97,35 +115,35 @@ export default function Home() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Quick Stats */}
-            <div className="grid md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-neutral-600">2,847</div>
-                  <div className="text-sm text-neutral-500">Membres actifs</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Calendar className="w-8 h-8 text-secondary mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-neutral-600">156</div>
-                  <div className="text-sm text-neutral-500">Événements/mois</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <MessageCircleQuestion className="w-8 h-8 text-accent mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-neutral-600">12.5k</div>
-                  <div className="text-sm text-neutral-500">Messages échangés</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Heart className="w-8 h-8 text-pink-500 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-neutral-600">98%</div>
-                  <div className="text-sm text-neutral-500">Satisfaction</div>
-                </CardContent>
-              </Card>
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="glass-effect card-hover rounded-2xl p-6 text-center border border-border/50">
+                <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-foreground mb-1">2,847</div>
+                <div className="text-sm text-muted-foreground">Membres actifs</div>
+              </div>
+              <div className="glass-effect card-hover rounded-2xl p-6 text-center border border-border/50">
+                <div className="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-foreground mb-1">156</div>
+                <div className="text-sm text-muted-foreground">Événements/mois</div>
+              </div>
+              <div className="glass-effect card-hover rounded-2xl p-6 text-center border border-border/50">
+                <div className="w-12 h-12 bg-gradient-to-br from-accent to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <MessageCircleQuestion className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-foreground mb-1">12.5k</div>
+                <div className="text-sm text-muted-foreground">Messages échangés</div>
+              </div>
+              <div className="glass-effect card-hover rounded-2xl p-6 text-center border border-border/50">
+                <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-foreground mb-1">98%</div>
+                <div className="text-sm text-muted-foreground">Satisfaction</div>
+              </div>
             </div>
 
             {/* Upcoming Events */}

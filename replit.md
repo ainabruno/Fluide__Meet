@@ -192,8 +192,11 @@ Changelog:
   * Advanced moderation system with approval requirements for sensitive topics
   * Private categories for adult/advanced discussions with restricted access
   * Color-coded and icon-based category identification system
-  * Community groups integration with membership management
-  * Sample forum topics and discussion threads for each category
+  * 20 diverse community groups across 7 thematic categories
+  * Local groups (Paris, Lyon, Marseille), spiritual practices, personal development
+  * Identity-specific groups (LGBTQ+, parents, seniors), advanced practices (BDSM, sacred sexuality)
+  * Support groups, creative/cultural groups, and activity-based communities
+  * Varied privacy settings and approval mechanisms for different group types
   * Complete API endpoints for forum categories, topics, and community groups
 ```
 

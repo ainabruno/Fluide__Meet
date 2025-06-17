@@ -745,47 +745,300 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/community/groups', async (req, res) => {
     try {
       const groups = [
+        // Groupes locaux par ville
         {
           id: 1,
           name: "Polyamorie Paris",
-          description: "Groupe local pour les personnes en relations polyamoureuses à Paris",
+          description: "Groupe local pour les personnes en relations polyamoureuses à Paris. Rencontres mensuelles, cafés poly et discussions ouvertes.",
           isPrivate: true,
           requiresApproval: true,
           maxMembers: 50,
           currentMembers: 34,
           creatorId: "user1",
           creatorName: "Sophie L.",
-          tags: ["Paris", "polyamorie", "local"],
+          tags: ["Paris", "polyamorie", "local", "rencontres"],
           imageUrl: null,
           membershipStatus: "member"
         },
         {
           id: 2,
+          name: "Relations Alternatives Lyon",
+          description: "Communauté lyonnaise pour explorer les relations éthiques non-monogames. Événements sociaux et groupes de parole.",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 40,
+          currentMembers: 28,
+          creatorId: "user4",
+          creatorName: "Marc D.",
+          tags: ["Lyon", "relations", "éthique", "social"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+        {
+          id: 3,
+          name: "Fluide Marseille",
+          description: "Groupe méditerranéen pour les relations libres et conscientes. Plage, nature et connexions authentiques.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 60,
+          currentMembers: 42,
+          creatorId: "user5",
+          creatorName: "Océane P.",
+          tags: ["Marseille", "nature", "liberté", "authenticité"],
+          imageUrl: null,
+          membershipStatus: "pending"
+        },
+
+        // Groupes thématiques spirituels
+        {
+          id: 4,
           name: "Tantra & Méditation",
-          description: "Pratiques tantriques et méditation en groupe",
+          description: "Pratiques tantriques, méditation et exploration de l'énergie sexuelle sacrée. Séances guidées et partages d'expériences.",
           isPrivate: false,
           requiresApproval: false,
           maxMembers: 100,
           currentMembers: 67,
           creatorId: "user2",
           creatorName: "Luna M.",
-          tags: ["tantra", "méditation", "spiritualité"],
+          tags: ["tantra", "méditation", "spiritualité", "énergie"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+        {
+          id: 5,
+          name: "Breathwork & Connexion",
+          description: "Exploration des techniques de respiration consciente pour approfondir l'intimité et la connexion.",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 30,
+          currentMembers: 22,
+          creatorId: "user6",
+          creatorName: "Kai S.",
+          tags: ["breathwork", "respiration", "intimité", "connexion"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+        {
+          id: 6,
+          name: "Cercles de Femmes Sacrées",
+          description: "Espace exclusif pour l'exploration de la féminité sacrée, des cycles et de la sexualité féminine.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 25,
+          currentMembers: 18,
+          creatorId: "user7",
+          creatorName: "Isis R.",
+          tags: ["femmes", "sacré", "cycles", "féminité"],
           imageUrl: null,
           membershipStatus: "pending"
         },
+
+        // Groupes de développement personnel
         {
-          id: 3,
+          id: 7,
           name: "Communication Consciente",
-          description: "Développer ses compétences en communication relationnelle",
+          description: "Développer ses compétences en communication non-violente et écoute empathique dans les relations.",
           isPrivate: false,
           requiresApproval: true,
           maxMembers: 75,
           currentMembers: 45,
           creatorId: "user3",
           creatorName: "Thomas B.",
-          tags: ["communication", "développement", "skills"],
+          tags: ["communication", "CNV", "empathie", "skills"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+        {
+          id: 8,
+          name: "Gestion de la Jalousie",
+          description: "Espace de soutien pour comprendre et transformer la jalousie en relations multiples.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 35,
+          currentMembers: 24,
+          creatorId: "user8",
+          creatorName: "Camille F.",
+          tags: ["jalousie", "émotions", "transformation", "soutien"],
           imageUrl: null,
           membershipStatus: "not_member"
+        },
+        {
+          id: 9,
+          name: "Estime de Soi & Relations",
+          description: "Cultiver la confiance en soi et l'amour-propre pour des relations plus épanouissantes.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 80,
+          currentMembers: 56,
+          creatorId: "user9",
+          creatorName: "Alexandre V.",
+          tags: ["estime", "confiance", "amour-propre", "épanouissement"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+
+        // Groupes spécialisés par identité
+        {
+          id: 10,
+          name: "Polyamorie LGBTQ+",
+          description: "Espace inclusif pour les personnes LGBTQ+ explorant les relations polyamoureuses et alternatives.",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 60,
+          currentMembers: 38,
+          creatorId: "user10",
+          creatorName: "Robin C.",
+          tags: ["LGBTQ+", "inclusivité", "diversité", "polyamorie"],
+          imageUrl: null,
+          membershipStatus: "pending"
+        },
+        {
+          id: 11,
+          name: "Parents Polyamoureux",
+          description: "Soutien et conseils pour les parents en relations multiples. Co-parentalité et familles recomposées.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 40,
+          currentMembers: 26,
+          creatorId: "user11",
+          creatorName: "Julie & David",
+          tags: ["parentalité", "famille", "enfants", "co-parentalité"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+        {
+          id: 12,
+          name: "Seniors & Relations Alternatives",
+          description: "Communauté pour les personnes de 50+ explorant de nouvelles formes relationnelles.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 30,
+          currentMembers: 19,
+          creatorId: "user12",
+          creatorName: "Françoise M.",
+          tags: ["seniors", "50+", "maturité", "exploration"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+
+        // Groupes de pratiques avancées
+        {
+          id: 13,
+          name: "BDSM Éthique & Conscient",
+          description: "Exploration des pratiques BDSM dans un cadre éthique, consensuel et bienveillant.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 25,
+          currentMembers: 17,
+          creatorId: "user13",
+          creatorName: "Maître K.",
+          tags: ["BDSM", "éthique", "consentement", "pratiques"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+        {
+          id: 14,
+          name: "Sexualité Sacrée",
+          description: "Approche spirituelle de la sexualité, rituels intimes et pratiques tantriques avancées.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 20,
+          currentMembers: 14,
+          creatorId: "user14",
+          creatorName: "Shakti D.",
+          tags: ["sexualité", "sacré", "rituels", "tantra"],
+          imageUrl: null,
+          membershipStatus: "pending"
+        },
+
+        // Groupes de soutien
+        {
+          id: 15,
+          name: "Transitions Relationnelles",
+          description: "Soutien pour les personnes en transition : ruptures, nouvelles relations, changements de vie.",
+          isPrivate: true,
+          requiresApproval: true,
+          maxMembers: 50,
+          currentMembers: 33,
+          creatorId: "user15",
+          creatorName: "Dr. Sarah L.",
+          tags: ["transition", "rupture", "changement", "soutien"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+        {
+          id: 16,
+          name: "Nouveaux dans la Polyamorie",
+          description: "Groupe d'accueil pour les débutants. Questions, conseils et accompagnement bienveillant.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 100,
+          currentMembers: 78,
+          creatorId: "user16",
+          creatorName: "Marie & Paul",
+          tags: ["débutants", "accueil", "conseils", "apprentissage"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+
+        // Groupes créatifs et culturels
+        {
+          id: 17,
+          name: "Art & Expression Créative",
+          description: "Exploration artistique des thèmes relationnels : peinture, écriture, danse et expression corporelle.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 60,
+          currentMembers: 41,
+          creatorId: "user17",
+          creatorName: "Artémis L.",
+          tags: ["art", "créativité", "expression", "culture"],
+          imageUrl: null,
+          membershipStatus: "member"
+        },
+        {
+          id: 18,
+          name: "Lectures & Philosophie",
+          description: "Club de lecture autour des ouvrages sur l'amour, la sexualité et les relations alternatives.",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 45,
+          currentMembers: 32,
+          creatorId: "user18",
+          creatorName: "Socrate B.",
+          tags: ["lecture", "philosophie", "littérature", "réflexion"],
+          imageUrl: null,
+          membershipStatus: "pending"
+        },
+
+        // Groupes d'activités
+        {
+          id: 19,
+          name: "Randonnées & Nature",
+          description: "Sorties nature, randonnées et activités outdoor pour créer des liens authentiques.",
+          isPrivate: false,
+          requiresApproval: false,
+          maxMembers: 70,
+          currentMembers: 52,
+          creatorId: "user19",
+          creatorName: "Sylvain N.",
+          tags: ["nature", "randonnée", "outdoor", "aventure"],
+          imageUrl: null,
+          membershipStatus: "not_member"
+        },
+        {
+          id: 20,
+          name: "Soirées & Événements Festifs",
+          description: "Organisation de soirées thématiques, fêtes et événements conviviaux pour la communauté.",
+          isPrivate: false,
+          requiresApproval: true,
+          maxMembers: 80,
+          currentMembers: 64,
+          creatorId: "user20",
+          creatorName: "Festa M.",
+          tags: ["soirées", "fêtes", "événements", "convivialité"],
+          imageUrl: null,
+          membershipStatus: "member"
         }
       ];
       res.json(groups);

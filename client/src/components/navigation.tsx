@@ -37,18 +37,48 @@ export default function Navigation() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navigation = [
+  const navigationSections = [
+    {
+      title: "Principal",
+      items: [
+        { name: "Accueil", href: "/", icon: Home, description: "Tableau de bord principal" },
+        { name: "Recherche", href: "/search", icon: Search, description: "Découvrir des profils" },
+        { name: "Messages", href: "/messages", icon: MessageCircleQuestion, description: "Conversations privées" },
+      ]
+    },
+    {
+      title: "Communauté",
+      items: [
+        { name: "Événements", href: "/events", icon: Calendar, description: "Ateliers et rencontres" },
+        { name: "Forums", href: "/community", icon: Users, description: "Discussions et groupes" },
+        { name: "Ressources", href: "/resources", icon: BookOpen, description: "Guides et articles" },
+      ]
+    },
+    {
+      title: "Développement",
+      items: [
+        { name: "Bien-être", href: "/wellness", icon: Sparkles, description: "Journal et méditations" },
+        { name: "Badges", href: "/badges", icon: Award, description: "Accomplissements" },
+        { name: "IA Fluide", href: "/ai", icon: Brain, description: "Assistant intelligent" },
+      ]
+    },
+    {
+      title: "Services",
+      items: [
+        { name: "Professionnels", href: "/professionals", icon: Briefcase, description: "Thérapeutes et coachs" },
+        { name: "Premium", href: "/subscription", icon: Crown, description: "Abonnements et affiliation" },
+      ]
+    }
+  ];
+
+  // Navigation simplifiée pour la barre horizontale
+  const mainNavigation = [
     { name: "Accueil", href: "/", icon: Home },
     { name: "Recherche", href: "/search", icon: Search },
     { name: "Événements", href: "/events", icon: Calendar },
     { name: "Messages", href: "/messages", icon: MessageCircleQuestion },
     { name: "Communauté", href: "/community", icon: Users },
     { name: "Bien-être", href: "/wellness", icon: Sparkles },
-    { name: "Ressources", href: "/resources", icon: BookOpen },
-    { name: "Professionnels", href: "/professionals", icon: Briefcase },
-    { name: "IA Fluide", href: "/ai", icon: Brain },
-    { name: "Abonnements", href: "/subscription", icon: Crown },
-    { name: "Badges", href: "/badges", icon: Award },
   ];
 
   const handleLogout = () => {
@@ -70,25 +100,100 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-1">
-            {navigation.map((item) => {
+          <nav className="hidden md:flex items-center space-x-1">
+            {mainNavigation.map((item) => {
+              const Icon = item.icon;
               const isActive = location === item.href;
               return (
                 <Link key={item.name} href={item.href}>
                   <Button
-                    variant={isActive ? "default" : "ghost"}
-                    className={`flex items-center space-x-2 ${
+                    variant="ghost"
+                    size="sm"
+                    className={`relative flex items-center space-x-2 transition-all duration-200 ${
                       isActive 
-                        ? "bg-primary text-white" 
+                        ? "bg-primary/15 text-primary border border-primary/20 shadow-sm" 
                         : "text-neutral-600 hover:text-primary hover:bg-primary/5"
                     }`}
                   >
-                    <item.icon className="w-4 h-4" />
-                    <span>{item.name}</span>
+                    <Icon className="w-4 h-4" />
+                    <span className="hidden lg:inline font-medium">{item.name}</span>
+                    {isActive && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1 w-1 h-1 bg-primary rounded-full" />
+                    )}
                   </Button>
                 </Link>
               );
             })}
+            
+            {/* Menu Plus avec sections organisées */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-neutral-600 hover:text-primary hover:bg-primary/5 border border-transparent hover:border-primary/20 transition-all duration-200"
+                >
+                  <Menu className="h-4 w-4 mr-1" />
+                  <span className="hidden lg:inline font-medium">Plus</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80 p-3 shadow-xl border border-border/50">
+                <div className="mb-3">
+                  <h4 className="font-semibold text-sm text-foreground mb-1">Menu complet</h4>
+                  <p className="text-xs text-muted-foreground">Accédez à toutes les fonctionnalités</p>
+                </div>
+                {navigationSections.slice(2).map((section, sectionIndex) => (
+                  <div key={section.title} className="mb-3">
+                    <div className="flex items-center gap-2 px-1 py-2 mb-2">
+                      <div className="w-1 h-4 bg-primary/30 rounded-full" />
+                      <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        {section.title}
+                      </h5>
+                    </div>
+                    <div className="space-y-1">
+                      {section.items.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location === item.href;
+                        return (
+                          <DropdownMenuItem key={item.name} asChild className="p-0">
+                            <Link
+                              href={item.href}
+                              className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 ${
+                                isActive 
+                                  ? "bg-primary/10 text-primary border border-primary/20 shadow-sm" 
+                                  : "hover:bg-muted/70 border border-transparent hover:border-border/50"
+                              }`}
+                            >
+                              <div className={`p-2 rounded-lg transition-colors ${
+                                isActive 
+                                  ? "bg-primary text-primary-foreground shadow-sm" 
+                                  : "bg-muted/80 text-muted-foreground group-hover:bg-muted"
+                              }`}>
+                                <Icon className="h-4 w-4" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm flex items-center gap-2">
+                                  {item.name}
+                                  {isActive && (
+                                    <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                                  )}
+                                </div>
+                                <div className="text-xs text-muted-foreground truncate mt-0.5">
+                                  {item.description}
+                                </div>
+                              </div>
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </div>
+                    {sectionIndex < navigationSections.slice(2).length - 1 && (
+                      <DropdownMenuSeparator className="my-3" />
+                    )}
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           {/* User Menu */}
@@ -177,30 +282,52 @@ export default function Navigation() {
                     </div>
                   </div>
 
-                  {/* Navigation */}
-                  <nav className="flex-1 py-4">
-                    <div className="space-y-2">
-                      {navigation.map((item) => {
-                        const isActive = location === item.href;
-                        return (
-                          <Link key={item.name} href={item.href}>
-                            <Button
-                              variant={isActive ? "default" : "ghost"}
-                              className={`w-full justify-start ${
-                                isActive 
-                                  ? "bg-primary text-white" 
-                                  : "text-neutral-600"
-                              }`}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              <item.icon className="mr-3 w-5 h-5" />
-                              {item.name}
-                            </Button>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </nav>
+                  {/* Navigation organisée par sections */}
+                  <div className="flex-1 overflow-y-auto py-4">
+                    {navigationSections.map((section, sectionIndex) => (
+                      <div key={section.title} className="mb-6">
+                        <h3 className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          {section.title}
+                        </h3>
+                        <nav className="space-y-1 px-2">
+                          {section.items.map((item) => {
+                            const Icon = item.icon;
+                            const isActive = location === item.href;
+                            return (
+                              <Link
+                                key={item.name}
+                                href={item.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  className={`w-full justify-start h-auto p-3 ${
+                                    isActive 
+                                      ? "bg-primary text-white shadow-lg" 
+                                      : "text-neutral-600 hover:text-primary hover:bg-primary/5"
+                                  }`}
+                                >
+                                  <div className={`p-1.5 rounded-md mr-3 ${
+                                    isActive 
+                                      ? "bg-primary-foreground/20" 
+                                      : "bg-muted"
+                                  }`}>
+                                    <Icon className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex-1 text-left min-w-0">
+                                    <div className="font-medium text-sm">{item.name}</div>
+                                    <div className="text-xs opacity-75 truncate">
+                                      {item.description}
+                                    </div>
+                                  </div>
+                                </Button>
+                              </Link>
+                            );
+                          })}
+                        </nav>
+                      </div>
+                    ))}
+                  </div>
 
                   {/* Footer */}
                   <div className="border-t pt-4 space-y-2">

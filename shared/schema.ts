@@ -337,3 +337,26 @@ export type InsertUserInteraction = typeof userInteractions.$inferInsert;
 
 export type ProfilePhoto = typeof profilePhotos.$inferSelect;
 export type InsertProfilePhoto = typeof profilePhotos.$inferInsert;
+
+// Professional types
+export type ProfessionalProfile = typeof professionalProfiles.$inferSelect;
+export type InsertProfessionalProfile = typeof professionalProfiles.$inferInsert;
+export const insertProfessionalProfileSchema = createInsertSchema(professionalProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ProfessionalService = typeof professionalServices.$inferSelect;
+export type InsertProfessionalService = typeof professionalServices.$inferInsert;
+export const insertProfessionalServiceSchema = createInsertSchema(professionalServices).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ProfessionalReview = typeof professionalReviews.$inferSelect;
+export type InsertProfessionalReview = typeof professionalReviews.$inferInsert;
+
+export type ServiceBooking = typeof serviceBookings.$inferSelect;
+export type InsertServiceBooking = typeof serviceBookings.$inferInsert;

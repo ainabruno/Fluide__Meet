@@ -79,6 +79,29 @@ export interface IStorage {
   getProfilePhotos(profileId: number): Promise<ProfilePhoto[]>;
   updateProfilePhoto(id: number, updates: Partial<InsertProfilePhoto>): Promise<ProfilePhoto>;
   deleteProfilePhoto(id: number): Promise<void>;
+  
+  // Professional operations
+  getProfessionals(filters?: { 
+    search?: string; 
+    specialty?: string; 
+    location?: string; 
+    limit?: number; 
+    offset?: number; 
+  }): Promise<ProfessionalProfile[]>;
+  getProfessional(id: number): Promise<ProfessionalProfile | undefined>;
+  getProfessionalByUserId(userId: string): Promise<ProfessionalProfile | undefined>;
+  createProfessionalProfile(profile: InsertProfessionalProfile): Promise<ProfessionalProfile>;
+  updateProfessionalProfile(id: number, profile: Partial<InsertProfessionalProfile>): Promise<ProfessionalProfile>;
+  
+  // Professional services
+  getProfessionalServices(professionalId: number): Promise<ProfessionalService[]>;
+  createProfessionalService(service: InsertProfessionalService): Promise<ProfessionalService>;
+  updateProfessionalService(id: number, service: Partial<InsertProfessionalService>): Promise<ProfessionalService>;
+  
+  // Service bookings
+  createServiceBooking(booking: InsertServiceBooking): Promise<ServiceBooking>;
+  getProfessionalBookings(professionalId: number): Promise<ServiceBooking[]>;
+  getClientBookings(clientId: string): Promise<ServiceBooking[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -328,6 +351,110 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProfilePhoto(id: number): Promise<void> {
     await db.delete(profilePhotos).where(eq(profilePhotos.id, id));
+  }
+
+  // Professional operations
+  async getProfessionals(filters?: { 
+    search?: string; 
+    specialty?: string; 
+    location?: string; 
+    limit?: number; 
+    offset?: number; 
+  }): Promise<ProfessionalProfile[]> {
+    const conditions = [eq(professionalProfiles.isActive, true)];
+    
+    if (filters?.search) {
+      conditions.push(
+        or(
+          like(professionalProfiles.businessName, `%${filters.search}%`),
+          like(professionalProfiles.description, `%${filters.search}%`)
+        )
+      );
+    }
+    
+    if (filters?.specialty) {
+      conditions.push(sql`${filters.specialty} = ANY(${professionalProfiles.specialties})`);
+    }
+    
+    if (filters?.location) {
+      conditions.push(like(professionalProfiles.location, `%${filters.location}%`));
+    }
+    
+    return await db.select()
+      .from(professionalProfiles)
+      .where(and(...conditions))
+      .orderBy(desc(professionalProfiles.rating), desc(professionalProfiles.totalReviews))
+      .limit(filters?.limit || 20)
+      .offset(filters?.offset || 0);
+  }
+
+  async getProfessional(id: number): Promise<ProfessionalProfile | undefined> {
+    const [professional] = await db.select().from(professionalProfiles).where(eq(professionalProfiles.id, id));
+    return professional;
+  }
+
+  async getProfessionalByUserId(userId: string): Promise<ProfessionalProfile | undefined> {
+    const [professional] = await db.select().from(professionalProfiles).where(eq(professionalProfiles.userId, userId));
+    return professional;
+  }
+
+  async createProfessionalProfile(profileData: InsertProfessionalProfile): Promise<ProfessionalProfile> {
+    const [profile] = await db.insert(professionalProfiles).values(profileData).returning();
+    return profile;
+  }
+
+  async updateProfessionalProfile(id: number, profileData: Partial<InsertProfessionalProfile>): Promise<ProfessionalProfile> {
+    const [profile] = await db
+      .update(professionalProfiles)
+      .set({ ...profileData, updatedAt: new Date() })
+      .where(eq(professionalProfiles.id, id))
+      .returning();
+    return profile;
+  }
+
+  // Professional services
+  async getProfessionalServices(professionalId: number): Promise<ProfessionalService[]> {
+    return await db.select()
+      .from(professionalServices)
+      .where(and(
+        eq(professionalServices.professionalId, professionalId),
+        eq(professionalServices.isActive, true)
+      ))
+      .orderBy(asc(professionalServices.category), asc(professionalServices.title));
+  }
+
+  async createProfessionalService(serviceData: InsertProfessionalService): Promise<ProfessionalService> {
+    const [service] = await db.insert(professionalServices).values(serviceData).returning();
+    return service;
+  }
+
+  async updateProfessionalService(id: number, serviceData: Partial<InsertProfessionalService>): Promise<ProfessionalService> {
+    const [service] = await db
+      .update(professionalServices)
+      .set({ ...serviceData, updatedAt: new Date() })
+      .where(eq(professionalServices.id, id))
+      .returning();
+    return service;
+  }
+
+  // Service bookings
+  async createServiceBooking(bookingData: InsertServiceBooking): Promise<ServiceBooking> {
+    const [booking] = await db.insert(serviceBookings).values(bookingData).returning();
+    return booking;
+  }
+
+  async getProfessionalBookings(professionalId: number): Promise<ServiceBooking[]> {
+    return await db.select()
+      .from(serviceBookings)
+      .where(eq(serviceBookings.professionalId, professionalId))
+      .orderBy(desc(serviceBookings.scheduledDate));
+  }
+
+  async getClientBookings(clientId: string): Promise<ServiceBooking[]> {
+    return await db.select()
+      .from(serviceBookings)
+      .where(eq(serviceBookings.clientId, clientId))
+      .orderBy(desc(serviceBookings.scheduledDate));
   }
 }
 

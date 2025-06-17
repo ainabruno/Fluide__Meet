@@ -23,7 +23,8 @@ import {
   LogOut, 
   Menu,
   Shield,
-  Brain
+  Brain,
+  Briefcase
 } from "lucide-react";
 
 export default function Navigation() {
@@ -37,6 +38,7 @@ export default function Navigation() {
     { name: "Événements", href: "/events", icon: Calendar },
     { name: "Messages", href: "/messages", icon: MessageCircleQuestion },
     { name: "Ressources", href: "/resources", icon: BookOpen },
+    { name: "Professionnels", href: "/professionals", icon: Briefcase },
     { name: "IA Fluide", href: "/ai", icon: Brain },
   ];
 

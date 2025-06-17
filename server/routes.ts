@@ -1048,6 +1048,563 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Notifications system
+  app.get('/api/notifications', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const notifications = [
+        {
+          id: 1,
+          type: "message",
+          title: "Nouveau message",
+          content: "Luna M. vous a envoyé un message",
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+          relatedId: "user2",
+          actionUrl: "/messages"
+        },
+        {
+          id: 2,
+          type: "forum",
+          title: "Nouvelle réponse",
+          content: "Votre sujet 'Communication' a reçu une réponse",
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+          relatedId: "topic1",
+          actionUrl: "/community?tab=forums"
+        },
+        {
+          id: 3,
+          type: "event",
+          title: "Événement demain",
+          content: "Rappel: Atelier Tantra demain à 19h",
+          isRead: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
+          relatedId: "event5",
+          actionUrl: "/events"
+        },
+        {
+          id: 4,
+          type: "match",
+          title: "Nouveau match",
+          content: "Vous avez une compatibilité de 89% avec Alex R.",
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
+          relatedId: "user3",
+          actionUrl: "/search"
+        }
+      ];
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.post('/api/notifications/:id/read', isAuthenticated, async (req: any, res) => {
+    try {
+      const notificationId = parseInt(req.params.id);
+      // Mark notification as read
+      res.json({ message: "Notification marked as read", id: notificationId });
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Failed to mark notification as read" });
+    }
+  });
+
+  // Advanced search endpoint
+  app.get('/api/search/global', async (req, res) => {
+    try {
+      const { q, type, filters } = req.query;
+      const query = q as string;
+      
+      if (!query || query.length < 2) {
+        return res.json({ results: [], suggestions: [] });
+      }
+
+      const results = {
+        profiles: [
+          {
+            id: "user1",
+            type: "profile",
+            title: "Sophie L.",
+            description: "Polyamorie, communication consciente",
+            avatar: null,
+            relevanceScore: 0.95
+          }
+        ],
+        forums: [
+          {
+            id: 1,
+            type: "forum_topic",
+            title: "Communication avec plusieurs partenaires",
+            description: "Discussions sur la gestion de multiples relations",
+            category: "Polyamorie & Relations",
+            relevanceScore: 0.88
+          }
+        ],
+        groups: [
+          {
+            id: 7,
+            type: "group",
+            title: "Communication Consciente",
+            description: "Développer ses compétences en CNV",
+            memberCount: 45,
+            relevanceScore: 0.92
+          }
+        ],
+        events: [
+          {
+            id: 1,
+            type: "event",
+            title: "Atelier Communication",
+            description: "Techniques de communication en relations multiples",
+            date: "2025-01-20",
+            relevanceScore: 0.85
+          }
+        ]
+      };
+
+      const suggestions = [
+        "communication polyamorie",
+        "tantra méditation",
+        "gestion jalousie",
+        "relations alternatives"
+      ];
+
+      res.json({ results, suggestions, totalResults: 12 });
+    } catch (error) {
+      console.error("Error in global search:", error);
+      res.status(500).json({ message: "Search failed" });
+    }
+  });
+
+  // Enhanced events system
+  app.get('/api/events/calendar', async (req, res) => {
+    try {
+      const { month, year } = req.query;
+      const events = [
+        {
+          id: 1,
+          title: "Atelier Tantra Débutants",
+          description: "Introduction aux pratiques tantriques",
+          date: "2025-01-20",
+          time: "19:00",
+          duration: 120,
+          location: "Paris 11e",
+          category: "tantra",
+          maxParticipants: 20,
+          currentParticipants: 15,
+          price: 35,
+          isRecurring: false,
+          organizerId: "user2",
+          organizerName: "Luna M.",
+          tags: ["débutant", "tantra", "spiritualité"]
+        },
+        {
+          id: 2,
+          title: "Café Polyamorie",
+          description: "Rencontre informelle autour d'un café",
+          date: "2025-01-22",
+          time: "18:30",
+          duration: 180,
+          location: "Café des Arts, Paris",
+          category: "social",
+          maxParticipants: 30,
+          currentParticipants: 22,
+          price: 0,
+          isRecurring: true,
+          recurringPattern: "weekly",
+          organizerId: "user1",
+          organizerName: "Sophie L.",
+          tags: ["social", "polyamorie", "discussion"]
+        },
+        {
+          id: 3,
+          title: "Méditation & Breathwork",
+          description: "Séance de méditation et travail respiratoire",
+          date: "2025-01-25",
+          time: "10:00",
+          duration: 90,
+          location: "Studio Zen, Lyon",
+          category: "wellness",
+          maxParticipants: 15,
+          currentParticipants: 8,
+          price: 25,
+          isRecurring: true,
+          recurringPattern: "bi-weekly",
+          organizerId: "user6",
+          organizerName: "Kai S.",
+          tags: ["méditation", "breathwork", "bien-être"]
+        }
+      ];
+      res.json(events);
+    } catch (error) {
+      console.error("Error fetching calendar events:", error);
+      res.status(500).json({ message: "Failed to fetch calendar events" });
+    }
+  });
+
+  app.post('/api/events/:id/join-waitlist', isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      res.json({ 
+        message: "Ajouté à la liste d'attente",
+        eventId,
+        userId,
+        position: 3
+      });
+    } catch (error) {
+      console.error("Error joining waitlist:", error);
+      res.status(500).json({ message: "Failed to join waitlist" });
+    }
+  });
+
+  // Mentorship system
+  app.get('/api/mentorship/matches', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const matches = [
+        {
+          id: 1,
+          mentorId: "user5",
+          mentorName: "Océane P.",
+          mentorExpertise: ["polyamorie", "communication", "gestion émotions"],
+          mentorExperience: "5 ans en relations alternatives",
+          compatibilityScore: 0.92,
+          availability: "weekends",
+          sessionType: "video",
+          pricePerSession: 0,
+          description: "Accompagnement bienveillant pour débuter en polyamorie"
+        },
+        {
+          id: 2,
+          mentorId: "user8",
+          mentorName: "Camille F.",
+          mentorExpertise: ["jalousie", "estime de soi", "transitions"],
+          mentorExperience: "3 ans de coaching relationnel",
+          compatibilityScore: 0.87,
+          availability: "evenings",
+          sessionType: "text_chat",
+          pricePerSession: 15,
+          description: "Spécialisée dans la gestion des émotions difficiles"
+        }
+      ];
+      res.json(matches);
+    } catch (error) {
+      console.error("Error fetching mentorship matches:", error);
+      res.status(500).json({ message: "Failed to fetch mentorship matches" });
+    }
+  });
+
+  app.post('/api/mentorship/request', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { mentorId, message, sessionType } = req.body;
+      
+      res.json({
+        message: "Demande de mentorat envoyée",
+        requestId: Math.floor(Math.random() * 10000),
+        estimatedResponse: "24-48h"
+      });
+    } catch (error) {
+      console.error("Error requesting mentorship:", error);
+      res.status(500).json({ message: "Failed to request mentorship" });
+    }
+  });
+
+  // Educational content system
+  app.get('/api/courses', async (req, res) => {
+    try {
+      const courses = [
+        {
+          id: 1,
+          title: "Fondamentaux de la Polyamorie",
+          description: "Introduction complète aux relations polyamoureuses éthiques",
+          instructor: "Dr. Sarah L.",
+          duration: "6 semaines",
+          lessonsCount: 18,
+          difficulty: "beginner",
+          price: 89,
+          isPremium: true,
+          rating: 4.8,
+          enrolledCount: 234,
+          thumbnailUrl: null,
+          topics: ["communication", "jalousie", "accords", "sécurité émotionnelle"],
+          progress: 0
+        },
+        {
+          id: 2,
+          title: "Tantra Moderne pour Couples",
+          description: "Pratiques tantriques adaptées aux relations contemporaines",
+          instructor: "Luna M.",
+          duration: "4 semaines",
+          lessonsCount: 12,
+          difficulty: "intermediate",
+          price: 67,
+          isPremium: true,
+          rating: 4.9,
+          enrolledCount: 156,
+          thumbnailUrl: null,
+          topics: ["énergie sexuelle", "méditation", "intimité", "connexion"],
+          progress: 25
+        },
+        {
+          id: 3,
+          title: "Communication Non-Violente en Amour",
+          description: "Techniques CNV appliquées aux relations intimes",
+          instructor: "Thomas B.",
+          duration: "3 semaines",
+          lessonsCount: 9,
+          difficulty: "beginner",
+          price: 45,
+          isPremium: false,
+          rating: 4.7,
+          enrolledCount: 189,
+          thumbnailUrl: null,
+          topics: ["écoute empathique", "expression besoins", "gestion conflits"],
+          progress: 100
+        }
+      ];
+      res.json(courses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      res.status(500).json({ message: "Failed to fetch courses" });
+    }
+  });
+
+  app.get('/api/courses/:id/lessons', async (req, res) => {
+    try {
+      const courseId = parseInt(req.params.id);
+      const lessons = [
+        {
+          id: 1,
+          title: "Qu'est-ce que la polyamorie ?",
+          description: "Définitions et principes fondamentaux",
+          duration: 45,
+          type: "video",
+          isCompleted: true,
+          isUnlocked: true,
+          order: 1
+        },
+        {
+          id: 2,
+          title: "Mythes et réalités",
+          description: "Déconstruire les idées reçues",
+          duration: 38,
+          type: "video",
+          isCompleted: true,
+          isUnlocked: true,
+          order: 2
+        },
+        {
+          id: 3,
+          title: "Types de relations alternatives",
+          description: "Panorama des structures relationnelles",
+          duration: 52,
+          type: "interactive",
+          isCompleted: false,
+          isUnlocked: true,
+          order: 3
+        }
+      ];
+      res.json(lessons);
+    } catch (error) {
+      console.error("Error fetching course lessons:", error);
+      res.status(500).json({ message: "Failed to fetch lessons" });
+    }
+  });
+
+  // Marketplace system
+  app.get('/api/marketplace/products', async (req, res) => {
+    try {
+      const { category, minPrice, maxPrice } = req.query;
+      const products = [
+        {
+          id: 1,
+          name: "Guide Complet : Premiers Pas en Polyamorie",
+          description: "E-book de 150 pages avec exercices pratiques",
+          category: "guides",
+          price: 24.99,
+          currency: "EUR",
+          sellerId: "user15",
+          sellerName: "Dr. Sarah L.",
+          rating: 4.8,
+          reviewCount: 67,
+          imageUrl: null,
+          isDigital: true,
+          tags: ["polyamorie", "débutant", "guide", "e-book"]
+        },
+        {
+          id: 2,
+          name: "Méditations Tantriques Audio",
+          description: "Collection de 20 méditations guidées",
+          category: "audio",
+          price: 19.99,
+          currency: "EUR",
+          sellerId: "user2",
+          sellerName: "Luna M.",
+          rating: 4.9,
+          reviewCount: 89,
+          imageUrl: null,
+          isDigital: true,
+          tags: ["tantra", "méditation", "audio", "relaxation"]
+        },
+        {
+          id: 3,
+          name: "Kit Rituels Intimes",
+          description: "Bougies, encens et guide pour rituels de couple",
+          category: "physical",
+          price: 45.00,
+          currency: "EUR",
+          sellerId: "user14",
+          sellerName: "Shakti D.",
+          rating: 4.6,
+          reviewCount: 34,
+          imageUrl: null,
+          isDigital: false,
+          shippingInfo: "Livraison 3-5 jours",
+          tags: ["rituels", "couple", "spiritualité", "accessoires"]
+        }
+      ];
+
+      let filteredProducts = products;
+      if (category && category !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category === category);
+      }
+      if (minPrice) {
+        filteredProducts = filteredProducts.filter(p => p.price >= parseFloat(minPrice as string));
+      }
+      if (maxPrice) {
+        filteredProducts = filteredProducts.filter(p => p.price <= parseFloat(maxPrice as string));
+      }
+
+      res.json(filteredProducts);
+    } catch (error) {
+      console.error("Error fetching marketplace products:", error);
+      res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  // Certification system
+  app.get('/api/certifications', async (req, res) => {
+    try {
+      const certifications = [
+        {
+          id: 1,
+          name: "Communicateur Conscient",
+          description: "Maîtrise des techniques de communication non-violente",
+          category: "communication",
+          requirements: [
+            "Compléter le cours CNV",
+            "Participer à 5 discussions de forum",
+            "Réussir l'évaluation pratique"
+          ],
+          badgeColor: "#2196F3",
+          badgeIcon: "💬",
+          difficultyLevel: "intermédiaire",
+          estimatedTime: "3-4 semaines",
+          isEarned: false,
+          progress: 60
+        },
+        {
+          id: 2,
+          name: "Guide Polyamorie",
+          description: "Compétences pour accompagner les débutants",
+          category: "mentorship",
+          requirements: [
+            "2 ans d'expérience documentée",
+            "Formation aux techniques d'accompagnement",
+            "Évaluations positives de mentorat"
+          ],
+          badgeColor: "#E91E63",
+          badgeIcon: "🌟",
+          difficultyLevel: "avancé",
+          estimatedTime: "6-8 mois",
+          isEarned: false,
+          progress: 20
+        },
+        {
+          id: 3,
+          name: "Praticien Tantra",
+          description: "Certification en pratiques tantriques éthiques",
+          category: "spirituality",
+          requirements: [
+            "Formation théorique 40h",
+            "Stage pratique supervisé",
+            "Mémoire de fin d'études"
+          ],
+          badgeColor: "#9C27B0",
+          badgeIcon: "🕉️",
+          difficultyLevel: "expert",
+          estimatedTime: "1 an",
+          isEarned: true,
+          progress: 100
+        }
+      ];
+      res.json(certifications);
+    } catch (error) {
+      console.error("Error fetching certifications:", error);
+      res.status(500).json({ message: "Failed to fetch certifications" });
+    }
+  });
+
+  // Enhanced messaging system
+  app.get('/api/conversations/:userId/media', isAuthenticated, async (req: any, res) => {
+    try {
+      const conversationUserId = req.params.userId;
+      const currentUserId = req.user.claims.sub;
+      
+      const mediaMessages = [
+        {
+          id: 1,
+          type: "voice",
+          url: "/audio/message1.mp3",
+          duration: 45,
+          senderId: conversationUserId,
+          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString()
+        },
+        {
+          id: 2,
+          type: "image",
+          url: "/images/shared2.jpg",
+          caption: "Vue de notre balade hier",
+          senderId: currentUserId,
+          timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString()
+        }
+      ];
+      
+      res.json(mediaMessages);
+    } catch (error) {
+      console.error("Error fetching conversation media:", error);
+      res.status(500).json({ message: "Failed to fetch media" });
+    }
+  });
+
+  app.post('/api/conversations/group', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { participantIds, name, description } = req.body;
+      
+      const groupConversation = {
+        id: Math.floor(Math.random() * 10000),
+        name: name || "Nouveau groupe",
+        description,
+        participantIds: [userId, ...participantIds],
+        createdBy: userId,
+        createdAt: new Date().toISOString(),
+        isGroup: true
+      };
+      
+      res.json(groupConversation);
+    } catch (error) {
+      console.error("Error creating group conversation:", error);
+      res.status(500).json({ message: "Failed to create group conversation" });
+    }
+  });
+
   // Subscription and monetization routes
   app.get('/api/subscription/plans', async (req, res) => {
     try {

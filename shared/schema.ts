@@ -560,11 +560,13 @@ export const subscriptionPlans = pgTable("subscription_plans", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull(),
   description: text("description"),
-  price: varchar("price"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   currency: varchar("currency").default("EUR"),
-  duration: varchar("duration"), // monthly, yearly
+  billingPeriod: varchar("billing_period"), // monthly, yearly, one-time
   features: text("features").array(),
   isActive: boolean("is_active").default(true),
+  isPopular: boolean("is_popular").default(false),
+  stripeId: varchar("stripe_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -573,9 +575,64 @@ export const userSubscriptions = pgTable("user_subscriptions", {
   userId: varchar("user_id").notNull().references(() => users.id),
   planId: integer("plan_id").notNull().references(() => subscriptionPlans.id),
   status: varchar("status").default("active"), // active, cancelled, expired
+  stripeSubscriptionId: varchar("stripe_subscription_id"),
+  currentPeriodStart: timestamp("current_period_start"),
+  currentPeriodEnd: timestamp("current_period_end"),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
   startDate: timestamp("start_date").defaultNow(),
   endDate: timestamp("end_date"),
   autoRenew: boolean("auto_renew").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Système d'affiliation
+export const affiliateProgram = pgTable("affiliate_program", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  affiliateCode: varchar("affiliate_code").notNull().unique(),
+  commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }).notNull(), // percentage
+  totalEarnings: decimal("total_earnings", { precision: 10, scale: 2 }).default("0"),
+  status: varchar("status").default("active"), // active, suspended, inactive
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const affiliateReferrals = pgTable("affiliate_referrals", {
+  id: serial("id").primaryKey(),
+  affiliateId: integer("affiliate_id").notNull().references(() => affiliateProgram.id, { onDelete: "cascade" }),
+  referredUserId: varchar("referred_user_id").references(() => users.id, { onDelete: "set null" }),
+  clickId: varchar("click_id").notNull().unique(),
+  ipAddress: varchar("ip_address"),
+  userAgent: text("user_agent"),
+  referrerUrl: text("referrer_url"),
+  landingPage: text("landing_page"),
+  clickedAt: timestamp("clicked_at").defaultNow(),
+  convertedAt: timestamp("converted_at"),
+  status: varchar("status").default("pending"), // pending, converted, invalid
+});
+
+export const affiliateCommissions = pgTable("affiliate_commissions", {
+  id: serial("id").primaryKey(),
+  affiliateId: integer("affiliate_id").notNull().references(() => affiliateProgram.id, { onDelete: "cascade" }),
+  referralId: integer("referral_id").references(() => affiliateReferrals.id, { onDelete: "set null" }),
+  subscriptionId: integer("subscription_id").references(() => userSubscriptions.id, { onDelete: "set null" }),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }).notNull(),
+  status: varchar("status").default("pending"), // pending, approved, paid, rejected
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const paymentHistory = pgTable("payment_history", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  type: varchar("type").notNull(), // subscription, service_booking, commission_payout
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency").default("EUR"),
+  status: varchar("status").notNull(), // pending, completed, failed, refunded
+  stripePaymentIntentId: varchar("stripe_payment_intent_id"),
+  description: text("description"),
+  metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -660,3 +717,15 @@ export type InsertIdentityVerification = typeof identityVerifications.$inferInse
 
 export type UserReport = typeof userReports.$inferSelect;
 export type InsertUserReport = typeof userReports.$inferInsert;
+
+export type AffiliateProgram = typeof affiliateProgram.$inferSelect;
+export type InsertAffiliateProgram = typeof affiliateProgram.$inferInsert;
+
+export type AffiliateReferral = typeof affiliateReferrals.$inferSelect;
+export type InsertAffiliateReferral = typeof affiliateReferrals.$inferInsert;
+
+export type AffiliateCommission = typeof affiliateCommissions.$inferSelect;
+export type InsertAffiliateCommission = typeof affiliateCommissions.$inferInsert;
+
+export type PaymentHistory = typeof paymentHistory.$inferSelect;
+export type InsertPaymentHistory = typeof paymentHistory.$inferInsert;

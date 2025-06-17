@@ -15,6 +15,8 @@ import AIFeatures from "@/pages/ai-features";
 import Professionals from "@/pages/professionals";
 import Community from "@/pages/community";
 import Wellness from "@/pages/wellness";
+import Subscription from "@/pages/subscription";
+import Badges from "@/pages/badges";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,6 +38,8 @@ function Router() {
           <Route path="/professionals" component={Professionals} />
           <Route path="/community" component={Community} />
           <Route path="/wellness" component={Wellness} />
+          <Route path="/subscription" component={Subscription} />
+          <Route path="/badges" component={Badges} />
         </>
       )}
       <Route component={NotFound} />

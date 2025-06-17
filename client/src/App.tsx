@@ -13,6 +13,8 @@ import Search from "@/pages/search";
 import Resources from "@/pages/resources";
 import AIFeatures from "@/pages/ai-features";
 import Professionals from "@/pages/professionals";
+import Community from "@/pages/community";
+import Wellness from "@/pages/wellness";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +34,8 @@ function Router() {
           <Route path="/resources" component={Resources} />
           <Route path="/ai" component={AIFeatures} />
           <Route path="/professionals" component={Professionals} />
+          <Route path="/community" component={Community} />
+          <Route path="/wellness" component={Wellness} />
         </>
       )}
       <Route component={NotFound} />

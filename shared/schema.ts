@@ -360,3 +360,303 @@ export type InsertProfessionalReview = typeof professionalReviews.$inferInsert;
 
 export type ServiceBooking = typeof serviceBookings.$inferSelect;
 export type InsertServiceBooking = typeof serviceBookings.$inferInsert;
+
+// Forums et communauté
+export const forumCategories = pgTable("forum_categories", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  color: varchar("color").default("#8B5CF6"),
+  icon: varchar("icon"),
+  isPrivate: boolean("is_private").default(false),
+  requiresApproval: boolean("requires_approval").default(false),
+  moderatorIds: text("moderator_ids").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const forumTopics = pgTable("forum_topics", {
+  id: serial("id").primaryKey(),
+  categoryId: integer("category_id").notNull().references(() => forumCategories.id),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  title: varchar("title").notNull(),
+  content: text("content").notNull(),
+  isPinned: boolean("is_pinned").default(false),
+  isLocked: boolean("is_locked").default(false),
+  tags: text("tags").array(),
+  viewCount: integer("view_count").default(0),
+  replyCount: integer("reply_count").default(0),
+  lastReplyAt: timestamp("last_reply_at"),
+  lastReplyById: varchar("last_reply_by_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const forumReplies = pgTable("forum_replies", {
+  id: serial("id").primaryKey(),
+  topicId: integer("topic_id").notNull().references(() => forumTopics.id),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  parentReplyId: integer("parent_reply_id").references(() => forumReplies.id),
+  likeCount: integer("like_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Groupes privés
+export const communityGroups = pgTable("community_groups", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  isPrivate: boolean("is_private").default(true),
+  requiresApproval: boolean("requires_approval").default(true),
+  maxMembers: integer("max_members").default(100),
+  currentMembers: integer("current_members").default(0),
+  creatorId: varchar("creator_id").notNull().references(() => users.id),
+  moderatorIds: text("moderator_ids").array(),
+  tags: text("tags").array(),
+  imageUrl: varchar("image_url"),
+  rules: text("rules"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const groupMemberships = pgTable("group_memberships", {
+  id: serial("id").primaryKey(),
+  groupId: integer("group_id").notNull().references(() => communityGroups.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  role: varchar("role").default("member"), // member, moderator, admin
+  status: varchar("status").default("pending"), // pending, approved, rejected
+  joinedAt: timestamp("joined_at").defaultNow(),
+});
+
+// Journal personnel et bien-être
+export const personalJournals = pgTable("personal_journals", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  title: varchar("title"),
+  content: text("content").notNull(),
+  mood: varchar("mood"), // joyful, calm, excited, sad, angry, anxious, etc.
+  energy: integer("energy"), // 1-10 scale
+  tags: text("tags").array(),
+  isPrivate: boolean("is_private").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Système de badges et certifications
+export const badges = pgTable("badges", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  category: varchar("category"), // skill, achievement, participation, etc.
+  iconUrl: varchar("icon_url"),
+  color: varchar("color").default("#8B5CF6"),
+  requirements: text("requirements"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userBadges = pgTable("user_badges", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  badgeId: integer("badge_id").notNull().references(() => badges.id),
+  earnedAt: timestamp("earned_at").defaultNow(),
+  isVisible: boolean("is_visible").default(true),
+});
+
+// Système de mentorat
+export const mentorships = pgTable("mentorships", {
+  id: serial("id").primaryKey(),
+  mentorId: varchar("mentor_id").notNull().references(() => users.id),
+  menteeId: varchar("mentee_id").notNull().references(() => users.id),
+  focus: text("focus").array(), // areas of focus
+  status: varchar("status").default("active"), // active, paused, completed
+  startDate: timestamp("start_date").defaultNow(),
+  endDate: timestamp("end_date"),
+  meetingFrequency: varchar("meeting_frequency"), // weekly, biweekly, monthly
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Blog communautaire
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  title: varchar("title").notNull(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt"),
+  category: varchar("category"),
+  tags: text("tags").array(),
+  isPublished: boolean("is_published").default(false),
+  isFeatured: boolean("is_featured").default(false),
+  viewCount: integer("view_count").default(0),
+  likeCount: integer("like_count").default(0),
+  commentCount: integer("comment_count").default(0),
+  imageUrl: varchar("image_url"),
+  readingTime: integer("reading_time"), // en minutes
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const blogComments = pgTable("blog_comments", {
+  id: serial("id").primaryKey(),
+  postId: integer("post_id").notNull().references(() => blogPosts.id),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  parentCommentId: integer("parent_comment_id").references(() => blogComments.id),
+  likeCount: integer("like_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Méditations et contenu audio
+export const meditationContent = pgTable("meditation_content", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  description: text("description"),
+  category: varchar("category"), // tantra, mindfulness, breathwork, etc.
+  duration: integer("duration"), // en minutes
+  difficulty: varchar("difficulty"), // beginner, intermediate, advanced
+  instructor: varchar("instructor"),
+  audioUrl: varchar("audio_url"),
+  transcription: text("transcription"),
+  tags: text("tags").array(),
+  isPremium: boolean("is_premium").default(false),
+  playCount: integer("play_count").default(0),
+  rating: decimal("rating", { precision: 3, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Défis et exercices relationnels
+export const relationshipChallenges = pgTable("relationship_challenges", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  category: varchar("category"), // communication, intimacy, trust, etc.
+  difficulty: varchar("difficulty"),
+  duration: varchar("duration"), // daily, weekly, monthly
+  instructions: text("instructions").notNull(),
+  tips: text("tips").array(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userChallenges = pgTable("user_challenges", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  challengeId: integer("challenge_id").notNull().references(() => relationshipChallenges.id),
+  status: varchar("status").default("active"), // active, completed, abandoned
+  progress: integer("progress").default(0), // percentage
+  startDate: timestamp("start_date").defaultNow(),
+  completedDate: timestamp("completed_date"),
+  notes: text("notes"),
+  reflection: text("reflection"),
+});
+
+// Premium et abonnements
+export const subscriptionPlans = pgTable("subscription_plans", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  price: varchar("price"),
+  currency: varchar("currency").default("EUR"),
+  duration: varchar("duration"), // monthly, yearly
+  features: text("features").array(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userSubscriptions = pgTable("user_subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  planId: integer("plan_id").notNull().references(() => subscriptionPlans.id),
+  status: varchar("status").default("active"), // active, cancelled, expired
+  startDate: timestamp("start_date").defaultNow(),
+  endDate: timestamp("end_date"),
+  autoRenew: boolean("auto_renew").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Vérification d'identité et sécurité
+export const identityVerifications = pgTable("identity_verifications", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  verificationType: varchar("verification_type"), // photo_id, selfie, phone, etc.
+  status: varchar("status").default("pending"), // pending, approved, rejected
+  documentUrl: varchar("document_url"),
+  notes: text("notes"),
+  verifiedAt: timestamp("verified_at"),
+  verifiedBy: varchar("verified_by"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userReports = pgTable("user_reports", {
+  id: serial("id").primaryKey(),
+  reporterId: varchar("reporter_id").notNull().references(() => users.id),
+  reportedUserId: varchar("reported_user_id").notNull().references(() => users.id),
+  reason: varchar("reason").notNull(),
+  description: text("description"),
+  evidence: text("evidence").array(),
+  status: varchar("status").default("open"), // open, investigating, resolved, dismissed
+  moderatorId: varchar("moderator_id").references(() => users.id),
+  resolution: text("resolution"),
+  createdAt: timestamp("created_at").defaultNow(),
+  resolvedAt: timestamp("resolved_at"),
+});
+
+// Types pour les nouvelles tables
+export type ForumCategory = typeof forumCategories.$inferSelect;
+export type InsertForumCategory = typeof forumCategories.$inferInsert;
+
+export type ForumTopic = typeof forumTopics.$inferSelect;
+export type InsertForumTopic = typeof forumTopics.$inferInsert;
+
+export type ForumReply = typeof forumReplies.$inferSelect;
+export type InsertForumReply = typeof forumReplies.$inferInsert;
+
+export type CommunityGroup = typeof communityGroups.$inferSelect;
+export type InsertCommunityGroup = typeof communityGroups.$inferInsert;
+
+export type GroupMembership = typeof groupMemberships.$inferSelect;
+export type InsertGroupMembership = typeof groupMemberships.$inferInsert;
+
+export type PersonalJournal = typeof personalJournals.$inferSelect;
+export type InsertPersonalJournal = typeof personalJournals.$inferInsert;
+
+export type Badge = typeof badges.$inferSelect;
+export type InsertBadge = typeof badges.$inferInsert;
+
+export type UserBadge = typeof userBadges.$inferSelect;
+export type InsertUserBadge = typeof userBadges.$inferInsert;
+
+export type Mentorship = typeof mentorships.$inferSelect;
+export type InsertMentorship = typeof mentorships.$inferInsert;
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = typeof blogPosts.$inferInsert;
+
+export type BlogComment = typeof blogComments.$inferSelect;
+export type InsertBlogComment = typeof blogComments.$inferInsert;
+
+export type MeditationContent = typeof meditationContent.$inferSelect;
+export type InsertMeditationContent = typeof meditationContent.$inferInsert;
+
+export type RelationshipChallenge = typeof relationshipChallenges.$inferSelect;
+export type InsertRelationshipChallenge = typeof relationshipChallenges.$inferInsert;
+
+export type UserChallenge = typeof userChallenges.$inferSelect;
+export type InsertUserChallenge = typeof userChallenges.$inferInsert;
+
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
+
+export type UserSubscription = typeof userSubscriptions.$inferSelect;
+export type InsertUserSubscription = typeof userSubscriptions.$inferInsert;
+
+export type IdentityVerification = typeof identityVerifications.$inferSelect;
+export type InsertIdentityVerification = typeof identityVerifications.$inferInsert;
+
+export type UserReport = typeof userReports.$inferSelect;
+export type InsertUserReport = typeof userReports.$inferInsert;

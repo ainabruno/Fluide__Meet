@@ -3,6 +3,13 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
+  calculateCompatibility, 
+  getEducationalResponse, 
+  moderateContent, 
+  generateConversationStarters,
+  getEventRecommendations 
+} from "./ai";
+import { 
   insertProfileSchema, 
   insertEventSchema, 
   insertMessageSchema, 

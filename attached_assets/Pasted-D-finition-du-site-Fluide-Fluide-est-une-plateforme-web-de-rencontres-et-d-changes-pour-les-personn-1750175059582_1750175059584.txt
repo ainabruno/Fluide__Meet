@@ -1,0 +1,69 @@
+Définition du site Fluide
+Fluide est une plateforme web de rencontres et d’échanges pour les personnes intéressées par les approches relationnelles alternatives telles que le Tantra, le sex-positif, la non-monogamie éthique et l’exploration de soi. Le site vise à créer un espace sécurisé, bienveillant et inclusif où les utilisateurs peuvent se rencontrer, discuter, participer à des événements, trouver des partenaires d’exploration ou simplement s’informer.
+
+🧩 Fonctionnalités principales du site Fluide
+🔐 Espace membre
+Inscription (email, pseudo, mot de passe)
+
+Création et personnalisation du profil (genre, orientation, intentions, pratiques, préférences, zone géographique…)
+
+Téléversement de photos (avec modération)
+
+Badge(s) de consentement ou valeurs partagées (ex : "Consentement explicite", "Tantra-friendly", "Polyamoureux·se", etc.)
+
+💬 Messagerie et interactions
+Messagerie privée sécurisée
+
+Filtres pour éviter les messages non désirés (ex : anti-harcèlement, messagerie différée…)
+
+Fonction “match fluide” basée sur affinités / intentions
+
+Likes / favoris / blocage / signalement
+
+📅 Événements & ateliers
+Calendrier d’événements (stages, ateliers, rencontres locales…)
+
+Inscription en ligne à des événements
+
+Paiement sécurisé (si payants)
+
+Système de notation et commentaires post-événement
+
+🔍 Recherche & découverte
+Moteur de recherche multicritères (âge, intention, distance, pratique, valeurs…)
+
+Suggestions intelligentes selon affinités
+
+Carte interactive des membres ou événements
+
+🧠 Contenus éducatifs
+Blog ou centre de ressources (articles, podcasts, vidéos…)
+
+Guides sur le consentement, le tantra, la CNV, le sexe positif, etc.
+
+FAQ et glossaire inclusif
+
+🛡️ Sécurité & modération
+Signalement des abus / modération humaine
+
+Modération des profils et contenus
+
+Politique claire de respect, consentement et inclusivité
+
+⚙️ Administration / Back-office
+Tableau de bord admin
+
+Gestion des membres et modération
+
+Statistiques d’activité (inscriptions, interactions…)
+
+CRM intégré (pour communication, relances, newsletters…)
+
+Outils d’analyse du comportement utilisateur (ex : n8n, Matomo)
+
+📱 Accessibilité & ergonomie
+Design responsive (mobile, tablette, ordinateur)
+
+Accessibilité renforcée (notamment FALC et contrastes visuels)
+
+Traduction multilingue possible (français / anglais à minima)

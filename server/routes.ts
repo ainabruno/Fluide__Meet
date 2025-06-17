@@ -450,6 +450,293 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Subscription and monetization routes
+  app.get('/api/subscription/plans', async (req, res) => {
+    try {
+      const plans = [
+        {
+          id: 1,
+          name: "Gratuit",
+          price: 0,
+          billingPeriod: "monthly",
+          features: [
+            "Profil de base",
+            "Recherche limitée",
+            "3 messages par jour",
+            "Forums publics"
+          ],
+          isPopular: false
+        },
+        {
+          id: 2,
+          name: "Premium",
+          price: 19.99,
+          billingPeriod: "monthly",
+          features: [
+            "Profil détaillé avec photos",
+            "Recherche avancée illimitée",
+            "Messages illimités",
+            "Accès à tous les événements",
+            "IA de compatibilité",
+            "Méditations premium",
+            "Support prioritaire"
+          ],
+          isPopular: true
+        },
+        {
+          id: 3,
+          name: "Expert",
+          price: 39.99,
+          billingPeriod: "monthly",
+          features: [
+            "Tout Premium inclus",
+            "Profil professionnel",
+            "Outils de coaching",
+            "Analytics avancés",
+            "Sessions de mentorat",
+            "Certification badges",
+            "Programme d'affiliation",
+            "API access"
+          ],
+          isPopular: false
+        }
+      ];
+      res.json(plans);
+    } catch (error) {
+      console.error("Error fetching subscription plans:", error);
+      res.status(500).json({ message: "Failed to fetch plans" });
+    }
+  });
+
+  app.get('/api/subscription/user', isAuthenticated, async (req, res) => {
+    try {
+      // Return null if no subscription exists
+      res.json(null);
+    } catch (error) {
+      console.error("Error fetching user subscription:", error);
+      res.status(500).json({ message: "Failed to fetch subscription" });
+    }
+  });
+
+  app.post('/api/subscription/create', isAuthenticated, async (req, res) => {
+    try {
+      const { planId, billingPeriod } = req.body;
+      
+      // Note: In production, this would integrate with Stripe
+      res.json({ 
+        success: true, 
+        message: "Abonnement créé avec succès!",
+        subscriptionId: "sub_demo_123"
+      });
+    } catch (error) {
+      console.error("Error creating subscription:", error);
+      res.status(500).json({ message: "Failed to create subscription" });
+    }
+  });
+
+  app.post('/api/subscription/cancel', isAuthenticated, async (req, res) => {
+    try {
+      res.json({ 
+        success: true, 
+        message: "Abonnement annulé. Il restera actif jusqu'à la fin de la période."
+      });
+    } catch (error) {
+      console.error("Error canceling subscription:", error);
+      res.status(500).json({ message: "Failed to cancel subscription" });
+    }
+  });
+
+  // Affiliate program routes
+  app.get('/api/affiliate/stats', isAuthenticated, async (req, res) => {
+    try {
+      const stats = {
+        totalEarnings: 0,
+        thisMonthEarnings: 0,
+        referrals: 0,
+        conversions: 0,
+        clickThroughRate: 0,
+        conversionRate: 0
+      };
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching affiliate stats:", error);
+      res.status(500).json({ message: "Failed to fetch affiliate stats" });
+    }
+  });
+
+  // Wellness and badges routes
+  app.get('/api/wellness/journal', isAuthenticated, async (req, res) => {
+    try {
+      // Return empty array for new users
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching journal entries:", error);
+      res.status(500).json({ message: "Failed to fetch journal entries" });
+    }
+  });
+
+  app.get('/api/wellness/meditations', async (req, res) => {
+    try {
+      const meditations = [
+        {
+          id: 1,
+          title: "Méditation Tantrique pour Débutants",
+          description: "Introduction douce aux pratiques tantriques de respiration et de connexion énergétique",
+          category: "Tantra",
+          duration: 15,
+          difficulty: "Débutant",
+          instructor: "Sarah Dubois",
+          isPremium: false,
+          rating: 4.8
+        },
+        {
+          id: 2,
+          title: "Breathwork pour l'Intimité",
+          description: "Techniques de respiration pour approfondir la connexion avec votre/vos partenaire(s)",
+          category: "Breathwork",
+          duration: 20,
+          difficulty: "Intermédiaire",
+          instructor: "Marc Chen",
+          isPremium: true,
+          rating: 4.9
+        },
+        {
+          id: 3,
+          title: "Méditation de la Communication Consciente",
+          description: "Pratique guidée pour développer l'écoute empathique et l'expression authentique",
+          category: "Communication",
+          duration: 25,
+          difficulty: "Tous niveaux",
+          instructor: "Luna Martinez",
+          isPremium: false,
+          rating: 4.7
+        }
+      ];
+      res.json(meditations);
+    } catch (error) {
+      console.error("Error fetching meditations:", error);
+      res.status(500).json({ message: "Failed to fetch meditations" });
+    }
+  });
+
+  app.get('/api/wellness/challenges', isAuthenticated, async (req, res) => {
+    try {
+      const challenges = [
+        {
+          id: 1,
+          title: "30 Jours de Communication Consciente",
+          description: "Améliorez votre communication relationnelle avec des exercices quotidiens",
+          category: "Communication",
+          difficulty: "Intermédiaire",
+          duration: "30 jours",
+          progress: 0,
+          status: "available"
+        },
+        {
+          id: 2,
+          title: "Semaine de Gratitude Relationnelle",
+          description: "Cultivez la reconnaissance envers vos partenaires et relations",
+          category: "Bien-être",
+          difficulty: "Débutant",
+          duration: "7 jours",
+          progress: 0,
+          status: "available"
+        },
+        {
+          id: 3,
+          title: "Exploration des Limites et Consentement",
+          description: "Approfondissez votre compréhension du consentement et de vos limites",
+          category: "Éducation",
+          difficulty: "Avancé",
+          duration: "14 jours",
+          progress: 0,
+          status: "available"
+        }
+      ];
+      res.json(challenges);
+    } catch (error) {
+      console.error("Error fetching challenges:", error);
+      res.status(500).json({ message: "Failed to fetch challenges" });
+    }
+  });
+
+  app.get('/api/badges/user', isAuthenticated, async (req, res) => {
+    try {
+      // Return empty array for new users
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching user badges:", error);
+      res.status(500).json({ message: "Failed to fetch user badges" });
+    }
+  });
+
+  app.get('/api/badges/available', async (req, res) => {
+    try {
+      const { category } = req.query;
+      let badges = [
+        {
+          id: 1,
+          name: "Premier Pas",
+          description: "Complétez votre profil avec toutes les informations de base",
+          category: "skill",
+          color: "#10B981",
+          requirements: "Profil complété à 100%",
+          progress: 0,
+          isEarned: false
+        },
+        {
+          id: 2,
+          name: "Explorateur",
+          description: "Visitez toutes les sections de la plateforme",
+          category: "achievement",
+          color: "#F59E0B",
+          requirements: "Visite de 8 sections différentes",
+          progress: 0,
+          isEarned: false
+        },
+        {
+          id: 3,
+          name: "Méditant",
+          description: "Complétez votre première méditation guidée",
+          category: "learning",
+          color: "#8B5CF6",
+          requirements: "1 méditation terminée",
+          progress: 0,
+          isEarned: false
+        },
+        {
+          id: 4,
+          name: "Mentor",
+          description: "Aidez d'autres membres de la communauté",
+          category: "community",
+          color: "#EF4444",
+          requirements: "5 réponses utiles dans les forums",
+          progress: 0,
+          isEarned: false
+        },
+        {
+          id: 5,
+          name: "Communicateur",
+          description: "Participez activement aux discussions de la communauté",
+          category: "community",
+          color: "#3B82F6",
+          requirements: "10 messages dans les forums",
+          progress: 0,
+          isEarned: false
+        }
+      ];
+
+      if (category && category !== 'all') {
+        badges = badges.filter(badge => badge.category === category);
+      }
+
+      res.json(badges);
+    } catch (error) {
+      console.error("Error fetching available badges:", error);
+      res.status(500).json({ message: "Failed to fetch available badges" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -26,7 +26,10 @@ import {
   Brain,
   Briefcase,
   Users,
-  Sparkles
+  Sparkles,
+  Crown,
+  Award,
+  CreditCard
 } from "lucide-react";
 
 export default function Navigation() {
@@ -44,6 +47,8 @@ export default function Navigation() {
     { name: "Ressources", href: "/resources", icon: BookOpen },
     { name: "Professionnels", href: "/professionals", icon: Briefcase },
     { name: "IA Fluide", href: "/ai", icon: Brain },
+    { name: "Abonnements", href: "/subscription", icon: Crown },
+    { name: "Badges", href: "/badges", icon: Award },
   ];
 
   const handleLogout = () => {

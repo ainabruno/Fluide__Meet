@@ -176,6 +176,15 @@ Changelog:
   * Complete database schema with 20+ new tables
   * Advanced matchmaking algorithms and compatibility scoring
   * Comprehensive navigation updates for all new sections
+- June 17, 2025. Complete monetization and affiliate system integration:
+  * Multi-tier subscription plans (Gratuit, Premium, Expert) with Stripe-ready infrastructure
+  * Comprehensive affiliate program with commission tracking and referral management
+  * Advanced payment history and commission payout systems
+  * Professional affiliate dashboard with earnings analytics and conversion tracking
+  * Marketing resources center for affiliates with banners and templates
+  * Integration of subscription controls in user interface
+  * Badge system rewards tied to monetization activities
+  * Complete API infrastructure for subscription management and affiliate operations
 ```
 
 ## User Preferences

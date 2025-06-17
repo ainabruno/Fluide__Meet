@@ -45,45 +45,68 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/10 to-secondary/10 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-5xl md:text-6xl font-playfair font-bold text-neutral-600 leading-tight">
-                Connectez-vous en toute{" "}
-                <span className="gradient-text">sécurité</span>
+      <section className="relative overflow-hidden py-24 lg:py-32">
+        {/* Background with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-rose-50 via-purple-50 to-pink-50" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%23f3e8ff%22%20fill-opacity=%220.3%22%3E%3Cpath%20d=%22m36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 mb-8">
+                <span className="text-sm font-medium text-primary mr-2">✨ Nouveau</span>
+                <span className="text-sm text-muted-foreground">IA pour des connexions authentiques</span>
+              </div>
+              
+              <h1 className="text-5xl lg:text-7xl font-playfair font-bold text-foreground leading-[1.1] mb-6">
+                Connexions{" "}
+                <span className="gradient-text">conscientes</span>{" "}
+                et authentiques
               </h1>
-              <p className="text-xl text-neutral-600 mt-6 leading-relaxed">
-                Rejoignez une communauté bienveillante dédiée aux approches relationnelles alternatives. 
-                Explorez le tantra, la non-monogamie éthique et l'exploration de soi dans un espace sécurisé.
+              
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl">
+                Découvrez une plateforme dédiée aux approches relationnelles alternatives. 
+                Explorez le tantra, la polyamorie éthique et l'épanouissement personnel 
+                dans un environnement sécurisé et bienveillant.
               </p>
               
-              {/* Trust indicators */}
-              <div className="flex flex-wrap gap-4 mt-8">
-                <div className="flex items-center bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <Shield className="text-accent mr-2 w-4 h-4" />
-                  <span className="text-sm font-medium">Modération humaine</span>
+              {/* Trust indicators redesigned */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+                <div className="glass-effect rounded-2xl p-4 text-center">
+                  <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Shield className="text-white w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm text-foreground">Modération IA</p>
+                  <p className="text-xs text-muted-foreground mt-1">Sécurité garantie</p>
                 </div>
-                <div className="flex items-center bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <Heart className="text-secondary mr-2 w-4 h-4" />
-                  <span className="text-sm font-medium">Consentement explicite</span>
+                <div className="glass-effect rounded-2xl p-4 text-center">
+                  <div className="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Heart className="text-white w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm text-foreground">Consentement</p>
+                  <p className="text-xs text-muted-foreground mt-1">Éthique d'abord</p>
                 </div>
-                <div className="flex items-center bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <Users className="text-primary mr-2 w-4 h-4" />
-                  <span className="text-sm font-medium">Communauté inclusive</span>
+                <div className="glass-effect rounded-2xl p-4 text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-accent to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Users className="text-white w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm text-foreground">Inclusivité</p>
+                  <p className="text-xs text-muted-foreground mt-1">Toutes identités</p>
                 </div>
               </div>
 
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button 
                   onClick={handleLogin}
-                  className="bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-600"
+                  size="lg"
+                  className="button-glow gradient-primary text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Commencer gratuitement
                 </Button>
                 <Button 
                   variant="outline"
-                  className="border-2 border-primary text-primary px-8 py-4 rounded-full text-lg font-semibold hover:bg-primary hover:text-white"
+                  size="lg"
+                  className="border-2 border-primary text-primary px-8 py-4 rounded-2xl text-lg font-semibold hover:bg-primary hover:text-white transition-all duration-300"
                 >
                   Découvrir les événements
                 </Button>

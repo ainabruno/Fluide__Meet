@@ -1,35 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;700&display=swap');
-
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(210, 6%, 21%);
-  --muted: hsl(210, 40%, 98%);
-  --muted-foreground: hsl(215, 13%, 34%);
+  --foreground: hsl(224, 71%, 4%);
+  --muted: hsl(220, 14%, 96%);
+  --muted-foreground: hsl(220, 9%, 46%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(210, 6%, 21%);
+  --popover-foreground: hsl(224, 71%, 4%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(210, 6%, 21%);
-  --border: hsl(214, 32%, 91%);
-  --input: hsl(214, 32%, 91%);
-  --primary: hsl(231, 100%, 70%);
-  --primary-foreground: hsl(216, 100%, 99%);
-  --secondary: hsl(338, 100%, 70%);
-  --secondary-foreground: hsl(216, 100%, 99%);
-  --accent: hsl(178, 60%, 60%);
-  --accent-foreground: hsl(216, 100%, 99%);
+  --card-foreground: hsl(224, 71%, 4%);
+  --border: hsl(220, 13%, 91%);
+  --input: hsl(220, 13%, 91%);
+  --primary: hsl(346, 77%, 50%);
+  --primary-foreground: hsl(355, 100%, 97%);
+  --secondary: hsl(262, 83%, 58%);
+  --secondary-foreground: hsl(270, 100%, 98%);
+  --accent: hsl(291, 95%, 65%);
+  --accent-foreground: hsl(300, 100%, 98%);
   --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(60, 9%, 98%);
-  --ring: hsl(231, 100%, 70%);
-  --radius: 0.5rem;
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(346, 77%, 50%);
+  --radius: 0.75rem;
   
-  /* Custom colors matching the design */
-  --neutral-50: hsl(210, 20%, 98%);
-  --neutral-100: hsl(210, 8%, 91%);
-  --neutral-600: hsl(210, 6%, 21%);
+  /* Fluide Brand Colors */
+  --rose-50: hsl(355, 100%, 97%);
+  --rose-100: hsl(355, 86%, 94%);
+  --rose-500: hsl(346, 77%, 50%);
+  --rose-600: hsl(346, 77%, 45%);
+  --purple-50: hsl(270, 100%, 98%);
+  --purple-100: hsl(269, 100%, 95%);
+  --purple-500: hsl(262, 83%, 58%);
+  --purple-600: hsl(262, 83%, 53%);
+  --pink-50: hsl(300, 100%, 98%);
+  --pink-100: hsl(300, 86%, 95%);
+  --pink-500: hsl(291, 95%, 65%);
+  --pink-600: hsl(291, 95%, 60%);
+  
+  /* Surface Colors */
+  --surface-50: hsl(220, 20%, 99%);
+  --surface-100: hsl(220, 14%, 96%);
+  --surface-200: hsl(220, 13%, 91%);
+  --surface-300: hsl(220, 9%, 82%);
+  --surface-600: hsl(220, 9%, 46%);
+  --surface-700: hsl(224, 71%, 4%);
 }
 
 .dark {
@@ -69,14 +86,53 @@
   }
   
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(231, 100%, 70%), hsl(338, 100%, 70%));
+    background: linear-gradient(135deg, hsl(346, 77%, 50%), hsl(262, 83%, 58%));
+  }
+  
+  .gradient-secondary {
+    background: linear-gradient(135deg, hsl(262, 83%, 58%), hsl(291, 95%, 65%));
   }
   
   .gradient-text {
-    background: linear-gradient(135deg, hsl(231, 100%, 70%), hsl(338, 100%, 70%));
+    background: linear-gradient(135deg, hsl(346, 77%, 50%), hsl(262, 83%, 58%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  
+  .glass-effect {
+    backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+  }
+  
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .button-glow {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .button-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .button-glow:hover::before {
+    left: 100%;
   }
 }
 

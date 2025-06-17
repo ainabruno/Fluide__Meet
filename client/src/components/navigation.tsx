@@ -29,7 +29,12 @@ import {
   Sparkles,
   Crown,
   Award,
-  CreditCard
+  CreditCard,
+  Bell,
+  GraduationCap,
+  UserCheck,
+  ShoppingCart,
+  SearchCheck
 } from "lucide-react";
 
 export default function Navigation() {
@@ -43,7 +48,9 @@ export default function Navigation() {
       items: [
         { name: "Accueil", href: "/", icon: Home, description: "Tableau de bord principal" },
         { name: "Recherche", href: "/search", icon: Search, description: "Découvrir des profils" },
+        { name: "Recherche Globale", href: "/global-search", icon: SearchCheck, description: "Recherche avancée" },
         { name: "Messages", href: "/messages", icon: MessageCircleQuestion, description: "Conversations privées" },
+        { name: "Notifications", href: "/notifications", icon: Bell, description: "Activité récente" },
       ]
     },
     {
@@ -52,6 +59,15 @@ export default function Navigation() {
         { name: "Événements", href: "/events", icon: Calendar, description: "Ateliers et rencontres" },
         { name: "Forums", href: "/community", icon: Users, description: "Discussions et groupes" },
         { name: "Ressources", href: "/resources", icon: BookOpen, description: "Guides et articles" },
+      ]
+    },
+    {
+      title: "Apprentissage",
+      items: [
+        { name: "Cours", href: "/courses", icon: GraduationCap, description: "Formations en ligne" },
+        { name: "Mentorat", href: "/mentorship", icon: UserCheck, description: "Accompagnement personnalisé" },
+        { name: "Certifications", href: "/certifications", icon: Award, description: "Validez vos compétences" },
+        { name: "Marketplace", href: "/marketplace", icon: ShoppingCart, description: "Ressources premium" },
       ]
     },
     {

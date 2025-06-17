@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, MapPin, Clock, Euro, Users, Video, Calendar, Phone, Mail, Globe } from "lucide-react";
+import { Star, MapPin, Clock, Euro, Users, Video, Calendar, Phone, Mail, Globe, Heart, Shield } from "lucide-react";
 
 interface ProfessionalProfile {
   id: number;
@@ -54,8 +54,9 @@ export default function Professionals() {
   });
 
   const specialties = [
-    "Tantra", "Thérapie de couple", "Coaching relationnel", "Sexothérapie",
-    "Méditation", "Breathwork", "Massage thérapeutique", "Conseil en polyamorie"
+    "Tantra", "Thérapie de couple", "Coaching relationnel", "Love coaching", 
+    "Sexothérapie", "Méditation", "Breathwork", "Massage thérapeutique", 
+    "Conseil en polyamorie"
   ];
 
   const locations = [
@@ -116,10 +117,11 @@ export default function Professionals() {
 
       {/* Onglets pour différentes catégories */}
       <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="all">Tous</TabsTrigger>
           <TabsTrigger value="therapists">Thérapeutes</TabsTrigger>
           <TabsTrigger value="coaches">Coachs</TabsTrigger>
+          <TabsTrigger value="love-coaching">Love Coaching</TabsTrigger>
           <TabsTrigger value="practitioners">Praticiens</TabsTrigger>
         </TabsList>
 
@@ -257,6 +259,171 @@ export default function Professionals() {
               Accompagnement personnalisé pour votre développement relationnel
             </p>
           </div>
+        </TabsContent>
+
+        <TabsContent value="love-coaching" className="space-y-6">
+          <div className="text-center space-y-4">
+            <h3 className="text-2xl font-bold">Séances de Love Coaching</h3>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Découvrez l'accompagnement spécialisé en love coaching pour développer vos relations amoureuses 
+              et votre épanouissement personnel dans l'amour conscient
+            </p>
+          </div>
+
+          {/* Services de Love Coaching */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Session individuelle */}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Video className="h-5 w-5 text-pink-500" />
+                  Session Individuelle
+                </CardTitle>
+                <CardDescription>
+                  Accompagnement personnalisé pour développer votre relation à l'amour
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium">Au programme :</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Identification de vos schémas amoureux</li>
+                    <li>• Développement de l'estime de soi</li>
+                    <li>• Communication authentique</li>
+                    <li>• Gestion des émotions relationnelles</li>
+                  </ul>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4" />
+                  <span>60-90 minutes</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Euro className="h-4 w-4" />
+                  <span>80-120€</span>
+                </div>
+                <Button className="w-full">Réserver une séance</Button>
+              </CardContent>
+            </Card>
+
+            {/* Session de couple */}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-purple-500" />
+                  Session de Couple
+                </CardTitle>
+                <CardDescription>
+                  Renforcez votre relation et explorez de nouvelles dynamiques amoureuses
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium">Au programme :</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Communication non-violente</li>
+                    <li>• Résolution de conflits</li>
+                    <li>• Intimité émotionnelle et physique</li>
+                    <li>• Exploration des besoins mutuels</li>
+                  </ul>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4" />
+                  <span>90-120 minutes</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Euro className="h-4 w-4" />
+                  <span>120-180€</span>
+                </div>
+                <Button className="w-full">Réserver une séance</Button>
+              </CardContent>
+            </Card>
+
+            {/* Coaching polyamour */}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-red-500" />
+                  Coaching Polyamour
+                </CardTitle>
+                <CardDescription>
+                  Accompagnement spécialisé dans les relations non-monogames éthiques
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium">Au programme :</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Gestion de la jalousie et compersion</li>
+                    <li>• Négociation des accords</li>
+                    <li>• Organisation du temps et de l'énergie</li>
+                    <li>• Communication avec les métamours</li>
+                  </ul>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4" />
+                  <span>75-90 minutes</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Euro className="h-4 w-4" />
+                  <span>100-150€</span>
+                </div>
+                <Button className="w-full">Réserver une séance</Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Informations supplémentaires */}
+          <Card className="bg-gradient-to-r from-pink-50 to-purple-50 border-pink-200">
+            <CardHeader>
+              <CardTitle>Pourquoi choisir le love coaching ?</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Bénéfices du love coaching :</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                      <span>Développement de l'intelligence émotionnelle</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                      <span>Amélioration de la communication intime</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                      <span>Guérison des blessures relationnelles</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                      <span>Exploration consciente de ses besoins</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Modalités :</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <Video className="h-4 w-4 text-purple-500" />
+                      <span>Sessions en ligne ou en présentiel</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Phone className="h-4 w-4 text-purple-500" />
+                      <span>Suivi téléphonique entre les séances</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-purple-500" />
+                      <span>Programmes d'accompagnement de 3 à 6 mois</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-purple-500" />
+                      <span>Confidentialité et bienveillance garanties</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="practitioners">

@@ -155,6 +155,13 @@ Changelog:
   * Complete database schema with professional tables
   * Professional section in navigation and routing
   * Dedicated professional interface and management system
+- June 17, 2025. Added love coaching sessions functionality:
+  * Dedicated "Love Coaching" tab in professionals section
+  * Specialized services for individual, couple, and polyamory coaching
+  * Detailed service descriptions with pricing and duration
+  * Professional booking system integration
+  * Educational content about love coaching benefits
+  * Complete API routes for professional services management
 ```
 
 ## User Preferences

@@ -279,6 +279,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Professional routes
+  app.get('/api/professionals', async (req, res) => {
+    try {
+      const { search, specialty, location, limit, offset } = req.query;
+      const professionals = await storage.getProfessionals({
+        search: search as string,
+        specialty: specialty as string,
+        location: location as string,
+        limit: limit ? parseInt(limit as string) : undefined,
+        offset: offset ? parseInt(offset as string) : undefined,
+      });
+      res.json(professionals);
+    } catch (error) {
+      console.error("Error fetching professionals:", error);
+      res.status(500).json({ message: "Failed to fetch professionals" });
+    }
+  });
+
+  app.get('/api/professionals/:id', async (req, res) => {
+    try {
+      const professional = await storage.getProfessional(parseInt(req.params.id));
+      if (!professional) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+      res.json(professional);
+    } catch (error) {
+      console.error("Error fetching professional:", error);
+      res.status(500).json({ message: "Failed to fetch professional" });
+    }
+  });
+
+  app.get('/api/professionals/:id/services', async (req, res) => {
+    try {
+      const services = await storage.getProfessionalServices(parseInt(req.params.id));
+      res.json(services);
+    } catch (error) {
+      console.error("Error fetching professional services:", error);
+      res.status(500).json({ message: "Failed to fetch services" });
+    }
+  });
+
+  app.post('/api/professionals/:id/book', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const professionalId = parseInt(req.params.id);
+      const bookingData = { ...req.body, clientId: userId, professionalId };
+      
+      const booking = await storage.createServiceBooking(bookingData);
+      res.json(booking);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      res.status(500).json({ message: "Failed to create booking" });
+    }
+  });
+
   // Routes IA - Système de matching intelligent
   app.post("/api/ai/compatibility", isAuthenticated, async (req: any, res) => {
     try {

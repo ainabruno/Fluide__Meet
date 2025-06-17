@@ -11,6 +11,7 @@ import Events from "@/pages/events";
 import Messages from "@/pages/messages";
 import Search from "@/pages/search";
 import Resources from "@/pages/resources";
+import AIFeatures from "@/pages/ai-features";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
           <Route path="/messages" component={Messages} />
           <Route path="/search" component={Search} />
           <Route path="/resources" component={Resources} />
+          <Route path="/ai" component={AIFeatures} />
         </>
       )}
       <Route component={NotFound} />

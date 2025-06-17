@@ -28,10 +28,7 @@ export default function AIAssistant() {
 
   const askAssistant = useMutation({
     mutationFn: async (question: string): Promise<ChatResponse> => {
-      return await apiRequest("/api/ai/assistant", {
-        method: "POST",
-        body: { question }
-      });
+      return await apiRequest("/api/ai/assistant", "POST", { question });
     },
     onSuccess: (response) => {
       setConversation(prev => [

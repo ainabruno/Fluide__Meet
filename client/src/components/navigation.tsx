@@ -22,7 +22,8 @@ import {
   Settings, 
   LogOut, 
   Menu,
-  Shield
+  Shield,
+  Brain
 } from "lucide-react";
 
 export default function Navigation() {

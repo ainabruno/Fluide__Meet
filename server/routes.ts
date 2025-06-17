@@ -371,9 +371,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Recommandations d'événements personnalisées
-  app.get("/api/ai/event-recommendations", isAuthenticated, async (req, res) => {
+  app.get("/api/ai/event-recommendations", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = req.user.claims.sub;
       
       const userProfile = await storage.getProfile(userId);
       if (!userProfile) {

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: fluide-app
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fluide-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: REPL_ID
+        generateValue: true
+      - key: ISSUER_URL
+        value: https://replit.com/oidc
+    healthCheckPath: /
+
+databases:
+  - name: fluide-db
+    plan: free

@@ -7,12 +7,25 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// Configuration automatique de l'URL du backend
+function getBaseUrl(): string {
+  // En développement local avec Vite sur port 5173
+  if (window.location.port === "5173") {
+    return "http://localhost:5000";
+  }
+  // En production ou autre environnement
+  return "";
+}
+
 export async function apiRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  const baseUrl = getBaseUrl();
+  const fullUrl = baseUrl + url;
+  
+  const res = await fetch(fullUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
@@ -29,7 +42,10 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey[0] as string, {
+    const baseUrl = getBaseUrl();
+    const fullUrl = baseUrl + (queryKey[0] as string);
+    
+    const res = await fetch(fullUrl, {
       credentials: "include",
     });
 

@@ -66,6 +66,8 @@ export function setupGoogleAuth(app: Express) {
   // ✅ Point d’entrée vers Google
   app.get("/api/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"],
+    prompt: "select_account",
+    accessType: "offline"
   }));
 
   // ✅ Callback après login

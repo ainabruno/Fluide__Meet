@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function Landing() {
   const handleLogin = () => {
-    window.location.href = "/api/google";
+    window.location.href = "/api/auth/google";
   };
 
   return (
